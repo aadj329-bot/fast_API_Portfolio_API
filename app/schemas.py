@@ -84,9 +84,6 @@ class ProjectBase(BaseModel):
     name: str
     description: str
     language: str
-    name: str
-    description: str
-    language: str
     url: HttpUrl
     visibility: str
 
@@ -110,4 +107,3 @@ class Project(ProjectBase):
 
     class Config:
         from_attributes = True
-
