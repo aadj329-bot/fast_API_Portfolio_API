@@ -24,7 +24,7 @@ def get_profile_by_id(db: Session, profile_id: int) -> models.Profile | None:
     return db.query(models.Profile).filter(models.Profile.id == profile_id).first()
 
 
-def update_profile(db: Session, profile_id: int, profile: schems.ProfileUpdate) -> models.Profile | None:
+def update_profile(db: Session, profile_id: int, profile: schemas.ProfileUpdate) -> models.Profile | None:
     """Update profile by ID."""
     db_profile = get_profile_by_id(db, profile_id)
     if not db_profile:
