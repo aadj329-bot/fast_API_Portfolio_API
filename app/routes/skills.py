@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.schemas import Skill, SkillCreate
-from app import crud
+from app.crud import skills_crud as crud 
 
 router = APIRouter(prefix="/skills", tags=["skills"])
 
@@ -18,19 +18,6 @@ def create_skill(skill: SkillCreate, db: Session = Depends(get_db)):
 def get_skills(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """Get all skills with opional filtering."""
     return crud.get_skills(db, skip=skip, limit=limit)
-
-
-@router.get("/category/{category}", response_model=list[Skill])
-def get_skills_by_category(category: str, db: Session = Depends(get_db)):
-    """Get skills filtered by category (e.g., 'language', 'framework', 'tool',
-    'concept')."""
-    skills = crud.get_skills_by_category(db, category=category)
-    if not skills:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"No skills found in category '{category}'"
-        )
-    return skills
 
 
 @router.get("/{skill_id}", response_model=Skill)

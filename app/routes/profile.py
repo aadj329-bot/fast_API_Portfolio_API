@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.schemas import Profile, ProfileCreate, ProfileUpdate
-from app import crud
+from app.crud import profile_crud as crud
 
 router = APIRouter(prefix="/profile", tags=["profile"])
 
