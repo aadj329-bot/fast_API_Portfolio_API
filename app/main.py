@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.database import create_tables, get_db
+from core.database import create_tables, get_db
 from routes import profile, projects, skills, status
 
 
@@ -28,4 +28,14 @@ app.include_router(projects.router)
 app.include_router(skills.router)
 app.include_router(status.router)
 
-# 
+
+# Root endpoint
+@app.get("/")
+async def root():
+    return {"message": "Welcome to Aaron's GitHub API"}
+
+
+# Health endpoint
+@app.get("/health")
+async def health():
+    return {"status": "ok"}

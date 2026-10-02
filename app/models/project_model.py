@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, DateTime, JSON, String
 from sqlalchemy.sql import func
 
-from app.database import Base
+from core.database import Base
 
 
 class Project(Base):

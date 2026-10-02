@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.database import get_db
+from core.database import get_db
 from app.schemas import Skill, SkillCreate
 from app.crud import skills_crud as crud 
 

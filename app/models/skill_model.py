@@ -1,7 +1,7 @@
 from sqlalchemy import Column, DateTime, Integer, JSON, String
 from sqlalchemy.sql import func
 
-from app.database import Base
+from core.database import Base
 
 
 class Skill(Base):

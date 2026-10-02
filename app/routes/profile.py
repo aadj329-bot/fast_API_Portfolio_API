@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.database import get_db
+from core.database import get_db
 from app.schemas import Profile, ProfileCreate, ProfileUpdate
 from app.crud import profile_crud as crud
 
@@ -32,7 +32,7 @@ def get_profile(db: Session = Depends(get_db)):
     return db_profile
 
 
-@router.get("./{profile_id}", repsonse_model=Profile)
+@router.get("./{profile_id}", response_model=Profile)
 def get_profile_by_id(profile_id: int, db: Session = Depends(get_db)):
     """Get a profile by ID."""
     db_profile = crud.get_profile_by_id(db, profile_id=profile_id)
