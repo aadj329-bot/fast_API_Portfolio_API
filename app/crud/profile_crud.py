@@ -1,5 +1,8 @@
 from sqlalchemy.orm import Session
-from app import models, schemas
+from app.models import profile_model as models
+from app.database import
+from app import schemas
+
 
 
 # PROFILE CRUD OPERATIONS

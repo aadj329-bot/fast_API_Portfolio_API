@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from app import models, schemas
+from app.models import skill_model as models
+from app import schemas
 
 
 # SKILL CRUD OPERATIONS

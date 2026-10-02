@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.schemas import StatusResponse, StatusCreate
-from app import crud
+from app.crud import status_crud as crud
 
 router = APIRouter(prefix="/status", tags=["status"])
 

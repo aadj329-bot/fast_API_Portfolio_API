@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from app import models, schemas
+from app.models import project_model as models
+from app import schemas
 
 
 # PROJECT CRUD OPERATIONS

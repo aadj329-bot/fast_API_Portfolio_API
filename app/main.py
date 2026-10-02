@@ -1,67 +1,31 @@
 from fastapi import FastAPI
-from app.database import create_tables, SessionLocal
+from fastapi.middleware.cors import CORSMiddleware
+from app.database import create_tables, get_db
+from routes import profile, projects, skills, status
 
 
-app = FastAPI(title="Aaron's GitHub API")
+app = FastAPI()
 
 
-# Create the database tables when the app starts
-import asyncio
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
-async def initialize_database():
-    # Create database tables
-    create_tables()
-    print("Database intialized successfully")
-
-
-async def main():
-    # Create the database tables
-    await initialize_database()
-    
-    # Create FastAPI app
-    app = FastAPI(lifespan=app)
-
-    # Include the routes
-    from app.routes import profile, projects, skills, status
-    app.include_router(profile.router)
-    app.include_router(skills.router)
-    app.include_router(projects.router)
-    app.include_router(status.router)
-
-    # Your existing routes and endpoints
-    @app.get("/")
-    async def root():
-        return {"message": "Welcome to Aaron's GitHub API"}
-
-    @app.get("/health")
-    async def health():
-        return {"status": "ok"}
-
-    return app
-
-    
-async def async_main():
-    # Initialize the database
+# Create the tables on startup
+@app.on_event("startup")
+async def on_startup():
     create_tables()
 
-    # Create the FastAPI app
-    app = FastAPI(title="Aaron's GitHub API")
 
-    # Add your routes
-    from app.routes import projects, profile, status, skills
-    app.include_router(profile.router)
-    app.include_router(skills.router)
-    app.include_router(status.router)
-    app.include_router(projects.router)
+# Include routers
+app.include_router(profile.router)
+app.include_router(projects.router)
+app.include_router(skills.router)
+app.include_router(status.router)
 
-    # Add routes
-    @app.get("/")
-    async def root():
-        return {"message": "Welcome to Aaron's GitHub API"}
-
-    @app.get("/health")
-    async def health():
-        return{"status": "ok"}
-
-    return app
+# 
