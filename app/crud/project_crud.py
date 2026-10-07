@@ -40,7 +40,7 @@ def update_project(db: Session, project_id: int, project: schemas.ProjectUpdate)
     update_data = project.model_dump(exclude_unset=True)
 
     for field, value in update_data.items():
-        setattr(update_data, field, value)
+        setattr(db_project, field, value)
 
     db.add(db_project)
     db.commit()

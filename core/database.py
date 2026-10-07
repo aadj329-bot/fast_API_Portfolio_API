@@ -1,37 +1,37 @@
-from fastapi import FastAPI, Depends
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import declarative_base, sessionmaker
+import os
+from dotenv import load_dotenv
 
 
-# Create SQLite database file
-DATABASE_URL = "sqlite:///./portfolio.db"
+# Load environment variables
+load_dotenv
 
 
-# Create the engine (connection to the database)
-engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False}  
-)
-
-
-# Create a session factory (used to interact with the database)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-# Base class for all ORM models 
+# Create the database model base class
 Base = declarative_base()
 
 
-def create_tables():
-    """Create all database tables"""
-    Base.metadata.create_all(bind=engine)
+# Database configuration - using environment variables
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not SQLALCHEMY_DATABASE_URL:
+    raise RuntimeError("DATABASE_URL environment variable is not set")
 
 
-def get_db():
-    """
-    Dependency injection function for FastAPI.
-    This gives each request its own database session.
-    """
+# Create the engine
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    future=True,
+)
+
+
+# Configure the sessionmaker
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+def get_db()-> Session:
+    """Dependency function to get database session."""
     db = SessionLocal()
     try:
         yield db
