@@ -53,6 +53,11 @@ class SkillCreate(SkillBase):
     pass
 
 
+class SkillUpdate(BaseModel):
+    category: Optional[str] = None
+    name: Optional[str] = None
+
+
 class Skill(SkillBase):
     id: int
     created_at: datetime
@@ -61,6 +66,7 @@ class Skill(SkillBase):
         from_attributes = True
         
 
+# Status schemas
 class StatusBase(BaseModel):
     current_projects: str
     learning: str

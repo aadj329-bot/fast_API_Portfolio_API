@@ -30,7 +30,7 @@ def get_skills_by_category(db: Session, category: str) -> list[models.Skill]:
     return db.query(models.Skill).filter(models.Skill.category == category).all()
 
 
-def update_skill(db: Session, skill_id: int, skill: schemas.SkillCreate) -> models.Skill | None:
+def update_skill(db: Session, skill_id: int, skill: schemas.SkillUpdate) -> models.Skill | None:
     db_skill = get_skill(db, skill_id)
 
     if not db_skill:

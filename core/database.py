@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import declarative_base, Session, sessionmaker
+from typing import Generator
 import os
 from dotenv import load_dotenv
 
@@ -35,7 +36,7 @@ def create_tables():
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-def get_db()-> Session:
+def get_db() -> Generator[Session, None, None]:
     """Dependency function to get database session."""
     db = SessionLocal()
     try:
