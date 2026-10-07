@@ -6,7 +6,7 @@ from core.database import Base
 
 class Skill(Base):
     """Database model for skill."""
-    __tablename__ = "skills"
+    __tablename__ = "skill"
 
     id = Column(Integer, primary_key=True, index=True)
     category = Column(String, index=True, nullable=False)
