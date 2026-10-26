@@ -11,7 +11,7 @@ router = APIRouter(prefix="/profile", tags=["profile"])
 @router.post("", response_model=Profile, status_code=status.HTTP_201_CREATED)
 def create_profile(profile: ProfileCreate, db: Session = Depends(get_db)):
     """Create a new profile."""
-    db_profile = crud.get_profile(db, username=profile.username)
+    db_profile = crud.get_profile_by_username(db, username=profile.username)
     if db_profile:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -32,10 +32,10 @@ def get_profile(db: Session = Depends(get_db)):
     return db_profile
 
 
-@router.get("/{profile_id}", response_model=Profile)
-def get_profile_by_id(profile_id: int, db: Session = Depends(get_db)):
+@router.get("/{username}", response_model=Profile)
+def get_profile_by_username(username: str, db: Session = Depends(get_db)):
     """Get a profile by ID."""
-    db_profile = crud.get_profile_by_id(db, profile_id=profile_id)
+    db_profile = crud.get_profile_by_username(db, username=username)
     if not db_profile:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -44,10 +44,10 @@ def get_profile_by_id(profile_id: int, db: Session = Depends(get_db)):
     return db_profile
 
 
-@router.put("/{profile_id}", response_model=Profile)
-def update_profile(profile_id: int, profile: ProfileUpdate, db: Session = Depends(get_db)):
-    """Update a profile by ID."""
-    db_profile = crud.update_profile(db=db, profile_id=profile_id, profile=profile)
+@router.put("/{username}", response_model=Profile)
+def update_profile(username: str, profile: ProfileUpdate, db: Session = Depends(get_db)):
+    """Update a profile by username."""
+    db_profile = crud.update_profile(db=db, username=username, profile=profile)
     if not db_profile: 
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -56,10 +56,10 @@ def update_profile(profile_id: int, profile: ProfileUpdate, db: Session = Depend
     return db_profile
 
 
-@router.delete("/{profile_id}")
-def delete_profile(profile_id: int, db: Session = Depends(get_db)):
+@router.delete("/{username}")
+def delete_profile(username: str, db: Session = Depends(get_db)):
     """Delete a profile by ID."""
-    success = crud.delete_profile(db=db, profile_id=profile_id)
+    success = crud.delete_profile(db=db, username=username)
     if not success:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

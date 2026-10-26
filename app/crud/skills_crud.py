@@ -25,11 +25,6 @@ def get_skills(db: Session, skip: int = 0, limit: int = 100) -> list[models.Skil
     return db.query(models.Skill).offset(skip).limit(limit).all()
 
 
-def get_skills_by_category(db: Session, category: str) -> list[models.Skill]:
-    """Retrieve skills by category."""
-    return db.query(models.Skill).filter(models.Skill.category == category).all()
-
-
 def update_skill(db: Session, skill_id: int, skill: schemas.SkillUpdate) -> models.Skill | None:
     db_skill = get_skill(db, skill_id)
 
@@ -45,3 +40,15 @@ def update_skill(db: Session, skill_id: int, skill: schemas.SkillUpdate) -> mode
     db.commit()
     db.refresh(db_skill)
     return db_skill
+
+
+def delete_skill(db: Session, skill_id: int):
+    """Delete skill by ID."""
+    db_skill = get_skill(db, skill_id)
+
+    if db_skill is None:
+        return  False
+
+    db.delete(db_skill)
+    db.commit()
+    return True

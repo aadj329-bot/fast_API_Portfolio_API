@@ -16,19 +16,14 @@ def create_profile(db: Session, profile: ProfileCreate) -> models.Profile:
     return db_profile
 
 
-def get_profile(db: Session, username: str) -> models.Profile | None:
-    """Retrieve profile by username."""
-    return db.query(models.Profile).filter(models.Profile.username == username).first()
-
-
-def get_profile_by_id(db: Session, profile_id: int) -> models.Profile | None:
+def get_profile_by_username(db: Session, profile_username: str) -> models.Profile | None:
     """Retrieve profile by ID."""
-    return db.query(models.Profile).filter(models.Profile.id == profile_id).first()
+    return db.query(models.Profile).filter(models.Profile.username == profile_username).first()
 
 
-def update_profile(db: Session, profile_id: int, profile: ProfileUpdate) -> models.Profile | None:
+def update_profile(db: Session, profile_username: int, profile: ProfileUpdate) -> models.Profile | None:
     """Update profile by ID."""
-    db_profile = get_profile_by_id(db, profile_id)
+    db_profile = get_profile_by_username(db, profile_username)
     if db_profile is None:
         return None
 
@@ -36,14 +31,13 @@ def update_profile(db: Session, profile_id: int, profile: ProfileUpdate) -> mode
     for field, value in update_data.items():
         setattr(db_profile, field, value)
 
-    db.add(db_profile)
     db.commit()
     db.refresh(db_profile)
     return db_profile
 
 
-def delete_profile(db: Session, profile_id: int) -> bool:
-    db_profile = get_profile_by_id(db, profile_id)
+def delete_profile(db: Session, profile_username: str) -> bool:
+    db_profile = get_profile_by_username(db, profile_username)
     
     if db_profile is None:
         return False
