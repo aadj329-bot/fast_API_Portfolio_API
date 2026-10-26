@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.database import create_tables, get_db
-from routes import profile, projects, skills, status
+from app.routes import profile, projects, skills, status
 
 
 app = FastAPI()

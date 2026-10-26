@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models import status_model as models
-from app import schemas, database
+from app import schemas
+from core import database
 
 
 # STATUS CRUD OPERATIONS
