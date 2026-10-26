@@ -33,7 +33,7 @@ def get_skills_by_category(db: Session, category: str) -> list[models.Skill]:
 def update_skill(db: Session, skill_id: int, skill: schemas.SkillUpdate) -> models.Skill | None:
     db_skill = get_skill(db, skill_id)
 
-    if not db_skill:
+    if db_skill is None:
         return None
 
     update_data = skill.model_dump(exclude_unset=True)

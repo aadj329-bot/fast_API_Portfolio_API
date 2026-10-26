@@ -1,12 +1,13 @@
 from sqlalchemy.orm import Session
+
 from app.models import project_model as models
-from app import schemas
+from app.schemas import ProjectCreate, ProjectUpdate
 
 
 # PROJECT CRUD OPERATIONS
 
 
-def create_project(db: Session, project: schemas.ProjectCreate) -> models.Project:
+def create_project(db: Session, project: ProjectCreate) -> models.Project:
     """Create a new project."""
     db_project = models.Project(**project.model_dump())
     db.add(db_project)
@@ -30,11 +31,11 @@ def get_projects(db: Session, skip: int = 0, limit: int = 100) -> list[models.Pr
     return db.query(models.Project).offset(skip).limit(limit).all()
 
 
-def update_project(db: Session, project_id: int, project: schemas.ProjectUpdate) -> models.Project | None:
+def update_project(db: Session, project_id: int, project: ProjectUpdate) -> models.Project | None:
     """Update a project by ID."""
     db_project = get_project(db, project_id)
 
-    if not db_project:
+    if db_project is None:
         return None
 
     update_data = project.model_dump(exclude_unset=True)
@@ -52,7 +53,7 @@ def delete_project(db: Session, project_id: int) -> bool:
     """Delete a project by ID."""
     db_project = get_project(db, project_id)
 
-    if not db_project:
+    if db_project is None:
         return False
 
     db.delete(db_project)

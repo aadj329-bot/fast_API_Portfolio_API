@@ -34,7 +34,7 @@ def update_status(db: Session,status_id: int, status: schemas.StatusCreate) -> m
     """Update the current status."""
     db_status = get_status(db, status_id)
 
-    if not db_status:
+    if db_status is None:
         return None
 
     update_data = status.model_dump(exclude_unset=True)
@@ -52,7 +52,7 @@ def delete_status(db: Session, status_id: int) -> bool:
     """Delete status by ID."""
     db_status = get_status(db, status_id)
 
-    if not db_status:
+    if db_status is None:
         return False
 
     db.delete(db_status)
