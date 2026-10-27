@@ -22,10 +22,10 @@ def tasks(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_tasks(db, skip=skip, limit=limit)
 
 
-@router.get("/{task_id}", response_model=Task)
-def get_task(task_id: int, db: Session = Depends(get_db)):
+@router.get("/{task_title}", response_model=Task)
+def get_task_by_title(task_title: str, db: Session = Depends(get_db)):
     """Get a task by ID."""
-    db_task = crud.get_task(db, task_id=task_id)
+    db_task = crud.get_task_by_title(db, task_title=task_title)
     if not db_task:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -34,10 +34,10 @@ def get_task(task_id: int, db: Session = Depends(get_db)):
     return db_task
 
 
-@router.put("/{task_id}", response_model=Task)
-def update_task(task_id: int, task: TaskUpdate, db: Session = Depends(get_db)):
+@router.put("/{task_title}", response_model=Task)
+def update_task(task_title: str, task: TaskUpdate, db: Session = Depends(get_db)):
     """Update a task by ID."""
-    db_task = crud.update_task(db=db, task_id=task_id, task=task)
+    db_task = crud.update_task(db=db, task_title=task_title, task=task)
     if not db_task:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -46,10 +46,10 @@ def update_task(task_id: int, task: TaskUpdate, db: Session = Depends(get_db)):
     return db_task
 
 
-@router.delete("/{task_id}")
-def delete_task(task_id: int, db: Session = Depends(get_db)):
+@router.delete("/{task_title}")
+def delete_task(task_title: str, db: Session = Depends(get_db)):
     """Delete a task by ID."""
-    success = crud.delete_task(db=db, task_id=task_id)
+    success = crud.delete_task(db=db, task_title=task_title)
     if not success:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
