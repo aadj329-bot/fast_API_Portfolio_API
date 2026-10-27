@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from app.schemas import Project, ProjectCreate
+from app.schemas import Project, ProjectCreate, ProjectUpdate
 from app.crud import project_crud as crud
 
 
@@ -34,7 +34,7 @@ def projects(db: Session = Depends(get_db)):
 
 
 @router.put("/{project_name}", response_model=Project)
-def update_project_by_name(project_name: str, project: ProjectCreate, db: Session = Depends(get_db)):
+def update_project_by_name(project_name: str, project: ProjectUpdate, db: Session = Depends(get_db)):
     """Update a project by name."""
     db_project = crud.update_project_by_name(db=db, project_name=project_name, project=project)
     if db_project is None:

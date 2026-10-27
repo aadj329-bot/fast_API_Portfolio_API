@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from app.schemas import StatusResponse, StatusCreate
+from app.schemas import StatusResponse, StatusCreate, StatusUpdate
 from app.crud import status_crud as crud
 
 router = APIRouter(prefix="/status", tags=["status"])
@@ -33,7 +33,7 @@ def get_all_statuses(skip: int = 0, limit: int = 100, db: Session = Depends(get_
 
 
 @router.put("/{status_id}", response_model=StatusResponse)
-def update_status_by_id(status_id: int, status_data: StatusCreate, db: Session = Depends(get_db)):
+def update_status_by_id(status_id: int, status_data: StatusUpdate, db: Session = Depends(get_db)):
     """Update a status entry by ID."""
     db_status = crud.update_status_by_id(db=db, status_id=status_id, status=status_data)
     if db_status is None:

@@ -84,6 +84,11 @@ class StatusResponse(StatusBase):
     class Config:
         from_attributes = True
 
+class StatusUpdate(StatusBase):
+    current_projects: Optional[str]
+    learning: Optional[str]
+    goals: Optional[str]
+
 
 # Project schemas
 class ProjectBase(BaseModel):

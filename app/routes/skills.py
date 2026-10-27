@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from app.schemas import Skill, SkillCreate
+from app.schemas import Skill, SkillCreate, SkillUpdate
 from app.crud import skills_crud as crud 
 
 router = APIRouter(prefix="/skills", tags=["skills"])
@@ -33,7 +33,7 @@ def get_skill_by_id(skill_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{skill_id}", response_model=Skill)
-def update_skill_by_id(skill_id: int, skill: SkillCreate, db: Session = Depends(get_db)):
+def update_skill_by_id(skill_id: int, skill: SkillUpdate, db: Session = Depends(get_db)):
     """Update a skill by ID."""
     db_skill = crud.update_skill_by_id(db=db, skill_id=skill_id, skill=skill)
     if not db_skill:
