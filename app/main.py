@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.database import create_tables, get_db
-from app.routes import profile, projects, skills, status
+from app.routes import profile, projects, skills, status, tasks
 
 
 app = FastAPI()
@@ -32,6 +32,7 @@ app.include_router(profile.router)
 app.include_router(projects.router)
 app.include_router(skills.router)
 app.include_router(status.router)
+app.include_router(tasks.router)
 
 
 # Root endpoint

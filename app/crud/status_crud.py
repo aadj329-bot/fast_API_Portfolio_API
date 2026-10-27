@@ -9,7 +9,7 @@ from core import database
 
 def create_status(db: Session, status: schemas.StatusCreate) -> models.Status:
     """Create a new status."""
-    db_status = models.Status(**status.model_dump())
+    db_status = models.Status(**status.model_dump(mode='json'))
     db.add(db_status)
     db.commit()
     db.refresh(db_status)
@@ -21,7 +21,7 @@ def get_status(db: Session, status_id: int) -> models.Status | None:
     return db.query(models.status).filter(models.Status.id == status_id).first()
 
 
-def get_statuses(db: Session, skip: int = 0, limit: int = 100) -> list[models.Status]:
+def get_all_statuses(db: Session, skip: int = 0, limit: int = 100) -> list[models.Status]:
     """Retrieve a list of statuses."""
     return db.query(models.Status).offset(skip).limit(limit).all()
 
@@ -33,7 +33,7 @@ def update_status(db: Session,status_id: int, status: schemas.StatusCreate) -> m
     if db_status is None:
         return None
 
-    update_data = status.model_dump(exclude_unset=True)
+    update_data = status.model_dump(exclude_unset=True, mode='json')
 
     for field, value in update_data.items():
         setattr(db_status, field, value)

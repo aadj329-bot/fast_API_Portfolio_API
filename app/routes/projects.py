@@ -21,11 +21,11 @@ def create_project(project: ProjectCreate, db: Session = Depends(get_db)):
     return crud.create_project(db=db, project=project)
 
 
-@router.get("/{project_id}", response_model=Project)
-def get_project(project_id: int, db: Session = Depends(get_db)):
-    """Get a project by ID."""
-    db_project = crud.get_project(db, project_id=project_id)
-    if not db_project: 
+@router.get("/{project_name}", response_model=Project)
+def get_project_by_name(project_name: str, db: Session = Depends(get_db)):
+    """Get a project by name."""
+    db_project = crud.get_project_by_name(db, project_name=project_name)
+    if db_project is None: 
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Project not found"
@@ -33,11 +33,11 @@ def get_project(project_id: int, db: Session = Depends(get_db)):
     return db_project
 
 
-@router.put("/{project_id}", response_model=Project)
-def update_project(project_id: int, project: ProjectCreate, db: Session = Depends(get_db)):
+@router.put("/{project_name}", response_model=Project)
+def update_project(project_name: str, project: ProjectCreate, db: Session = Depends(get_db)):
     """Update a project by ID."""
-    db_project = crud.update_project(db=db, project_id=project_id, project=project)
-    if not db_project:
+    db_project = crud.update_project(db=db, project_name=project_name, project=project)
+    if db_project is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Project not found"
@@ -45,10 +45,10 @@ def update_project(project_id: int, project: ProjectCreate, db: Session = Depend
     return db_project
 
 
-@router.delete("/{project_id}")
-def delete_project(project_id: int, db: Session = Depends(get_db)):
+@router.delete("/{project_name}")
+def delete_project(project_name: int, db: Session = Depends(get_db)):
     """Delete a project by ID."""
-    success = crud.delete_project(db=db, project_id=project_id)
+    success = crud.delete_project(db=db, project_name=project_name)
     if not success:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

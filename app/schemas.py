@@ -79,7 +79,7 @@ class StatusCreate(StatusBase):
 
 class StatusResponse(StatusBase):
     id: int
-    last_updated: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True

@@ -12,25 +12,13 @@ router = APIRouter(prefix="/status", tags=["status"])
 def create_status(status_data: StatusCreate, db: Session = Depends(get_db)):
     """Create a new status entry."""
     return crud.create_status(db=db, status=status_data)
-
-
-@router.get("", response_model=StatusResponse)
-def get_status(db: Session = Depends(get_db)):
-    """Get the current status (most recent entry)."""
-    db_status = crud.get_current_status(db)
-    if not db_status:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Status not found. Create one first."
-        )
-    return db_status
-
+ 
 
 @router.get("/{status_id}", response_model=StatusResponse)
-def get_status_by_id(status_id: int, db: Session = Depends(get_db)):
+def get_status(status_id: int, db: Session = Depends(get_db)):
     """Get a status by ID."""
     db_status = crud.get_status(db, status_id=status_id)
-    if not db_status:
+    if db_status is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Status not found"
@@ -48,7 +36,7 @@ def get_all_statuses(skip: int = 0, limit: int = 100, db: Session = Depends(get_
 def update_status(status_id: int, status_data: StatusCreate, db: Session = Depends(get_db)):
     """Update a status entry by ID."""
     db_status = crud.update_status(db=db, status_id=status_id, status=status_data)
-    if not db_status:
+    if db_status is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Status not found"

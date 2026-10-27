@@ -9,7 +9,7 @@ from app.schemas import ProjectCreate, ProjectUpdate
 
 def create_project(db: Session, project: ProjectCreate) -> models.Project:
     """Create a new project."""
-    db_project = models.Project(**project.model_dump())
+    db_project = models.Project(**project.model_dump(mode="json"))
     db.add(db_project)
     db.commit()
     db.refresh(db_project)
@@ -18,7 +18,7 @@ def create_project(db: Session, project: ProjectCreate) -> models.Project:
 
 def get_project_by_name(db: Session, project_name: str) -> models.Project | None:
     """Retrieve project by ID."""
-    return db.query(models.Project).filter(models.Project.id == project_id).first()
+    return db.query(models.Project).filter(models.Project.name == project_name).first()
 
 
 def get_projects(db: Session, skip: int = 0, limit: int = 100) -> list[models.Project]:
@@ -33,7 +33,7 @@ def update_project(db: Session, project_name: str, project: ProjectUpdate) -> mo
     if db_project is None:
         return None
 
-    update_data = project.model_dump(exclude_unset=True)
+    update_data = project.model_dump(exclude_unset=True, mode='json')
 
     for field, value in update_data.items():
         setattr(db_project, field, value)

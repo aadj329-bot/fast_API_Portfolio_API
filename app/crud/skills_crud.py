@@ -8,7 +8,7 @@ from app import schemas
 
 def create_skill(db: Session, skill: schemas.SkillCreate) -> models.Skill:
     """Create a new skill."""
-    db_skill = models.Skill(**skill.model_dump())
+    db_skill = models.Skill(**skill.model_dump(mode='json'))
     db.add(db_skill)
     db.commit()
     db.refresh(db_skill)
@@ -31,7 +31,7 @@ def update_skill(db: Session, skill_id: int, skill: schemas.SkillUpdate) -> mode
     if db_skill is None:
         return None
 
-    update_data = skill.model_dump(exclude_unset=True)
+    update_data = skill.model_dump(exclude_unset=True, mode='json')
 
     for field, value in update_data.items():
         setattr(db_skill, field, value)
