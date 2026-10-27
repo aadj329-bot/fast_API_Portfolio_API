@@ -13,7 +13,7 @@ def create_project(db: Session, project: ProjectCreate) -> models.Project:
     db.add(db_project)
     db.commit()
     db.refresh(db_project)
-    return db_project
+    return db_project 
 
 
 def get_project_by_name(db: Session, project_name: str) -> models.Project | None:
