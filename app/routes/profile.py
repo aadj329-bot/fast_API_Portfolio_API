@@ -20,18 +20,6 @@ def create_profile(profile: ProfileCreate, db: Session = Depends(get_db)):
     return crud.create_profile(db=db, profile=profile)
 
 
-@router.get("", response_model=Profile)
-def get_profile_by_username(db: Session = Depends(get_db)):
-    """Get the first profile (current user profile)."""
-    db_profile = crud.get_profile_by_username(db)
-    if not db_profile:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Profile not found. Create one first."
-        )
-    return db_profile 
-
-
 @router.get("/{profile_username}", response_model=Profile)
 def get_profile_by_username(profile_username: str, db: Session = Depends(get_db)):
     """Get a profile by username."""
