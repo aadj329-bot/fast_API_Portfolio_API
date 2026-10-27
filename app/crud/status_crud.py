@@ -18,7 +18,7 @@ def create_status(db: Session, status: schemas.StatusCreate) -> models.Status:
 
 def get_status_by_id(db: Session, status_id: int) -> models.Status | None:
     """Retrieve status by ID."""
-    return db.query(models.status).filter(models.Status.id == status_id).first()
+    return db.query(models.Status).filter(models.Status.id == status_id).first()
 
 
 def get_all_statuses(db: Session, skip: int = 0, limit: int = 100) -> list[models.Status]:
