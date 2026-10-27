@@ -9,12 +9,6 @@ from app.crud import project_crud as crud
 router = APIRouter(prefix="/projects")
 
 
-@router.get("", response_model=list[Project])
-def projects(db: Session = Depends(get_db)):
-    """Get all projects."""
-    return crud.get_projects(db)
-
-
 @router.post("", response_model=Project, status_code=status.HTTP_201_CREATED)
 def create_project(project: ProjectCreate, db: Session = Depends(get_db)):
     """Create a new project."""
@@ -33,9 +27,15 @@ def get_project_by_name(project_name: str, db: Session = Depends(get_db)):
     return db_project
 
 
+@router.get("", response_model=list[Project])
+def projects(db: Session = Depends(get_db)):
+    """Get all projects."""
+    return crud.get_projects(db)
+
+
 @router.put("/{project_name}", response_model=Project)
 def update_project(project_name: str, project: ProjectCreate, db: Session = Depends(get_db)):
-    """Update a project by ID."""
+    """Update a project by name."""
     db_project = crud.update_project(db=db, project_name=project_name, project=project)
     if db_project is None:
         raise HTTPException(
@@ -46,8 +46,8 @@ def update_project(project_name: str, project: ProjectCreate, db: Session = Depe
 
 
 @router.delete("/{project_name}")
-def delete_project(project_name: int, db: Session = Depends(get_db)):
-    """Delete a project by ID."""
+def delete_project(project_name: str, db: Session = Depends(get_db)):
+    """Delete a project by name."""
     success = crud.delete_project(db=db, project_name=project_name)
     if not success:
         raise HTTPException(
