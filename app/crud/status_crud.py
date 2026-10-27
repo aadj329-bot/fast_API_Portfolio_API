@@ -26,7 +26,7 @@ def get_all_statuses(db: Session, skip: int = 0, limit: int = 100) -> list[model
     return db.query(models.Status).offset(skip).limit(limit).all()
 
 
-def update_status(db: Session,status_id: int, status: schemas.StatusCreate) -> models.Status | None:
+def update_status_by_id(db: Session,status_id: int, status: schemas.StatusCreate) -> models.Status | None:
     """Update the current status."""
     db_status = get_status_by_id(db, status_id)
 
@@ -44,7 +44,7 @@ def update_status(db: Session,status_id: int, status: schemas.StatusCreate) -> m
     return db_status
 
 
-def delete_status(db: Session, status_id: int) -> bool:
+def delete_status_by_id(db: Session, status_id: int) -> bool:
     """Delete status by ID."""
     db_status = get_status_by_id(db, status_id)
 

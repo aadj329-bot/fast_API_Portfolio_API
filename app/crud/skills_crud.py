@@ -25,7 +25,7 @@ def get_skills(db: Session, skip: int = 0, limit: int = 100) -> list[models.Skil
     return db.query(models.Skill).offset(skip).limit(limit).all()
 
 
-def update_skill(db: Session, skill_id: int, skill: schemas.SkillUpdate) -> models.Skill | None:
+def update_skill_by_id(db: Session, skill_id: int, skill: schemas.SkillUpdate) -> models.Skill | None:
     db_skill = get_skill_by_id(db, skill_id)
 
     if db_skill is None:
@@ -42,7 +42,7 @@ def update_skill(db: Session, skill_id: int, skill: schemas.SkillUpdate) -> mode
     return db_skill
 
 
-def delete_skill(db: Session, skill_id: int):
+def delete_skill_by_id(db: Session, skill_id: int):
     """Delete skill by ID."""
     db_skill = get_skill_by_id(db, skill_id)
 

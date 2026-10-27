@@ -17,7 +17,7 @@ def create_project(db: Session, project: ProjectCreate) -> models.Project:
 
 
 def get_project_by_name(db: Session, project_name: str) -> models.Project | None:
-    """Retrieve project by ID."""
+    """Retrieve project by name."""
     return db.query(models.Project).filter(models.Project.name == project_name).first()
 
 
@@ -26,8 +26,8 @@ def get_projects(db: Session, skip: int = 0, limit: int = 100) -> list[models.Pr
     return db.query(models.Project).offset(skip).limit(limit).all()
 
 
-def update_project(db: Session, project_name: str, project: ProjectUpdate) -> models.Project | None:
-    """Update a project by ID."""
+def update_project_by_name(db: Session, project_name: str, project: ProjectUpdate) -> models.Project | None:
+    """Update a project by name."""
     db_project = get_project_by_name(db, project_name)
 
     if db_project is None:
@@ -43,7 +43,7 @@ def update_project(db: Session, project_name: str, project: ProjectUpdate) -> mo
     return db_project
 
 
-def delete_project(db: Session, project_name: str) -> bool:
+def delete_project_by_name(db: Session, project_name: str) -> bool:
     """Delete a project by name."""
     db_project = get_project_by_name(db, project_name)
 

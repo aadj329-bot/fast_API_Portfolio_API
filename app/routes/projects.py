@@ -34,9 +34,9 @@ def projects(db: Session = Depends(get_db)):
 
 
 @router.put("/{project_name}", response_model=Project)
-def update_project(project_name: str, project: ProjectCreate, db: Session = Depends(get_db)):
+def update_project_by_name(project_name: str, project: ProjectCreate, db: Session = Depends(get_db)):
     """Update a project by name."""
-    db_project = crud.update_project(db=db, project_name=project_name, project=project)
+    db_project = crud.update_project_by_name(db=db, project_name=project_name, project=project)
     if db_project is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -46,9 +46,9 @@ def update_project(project_name: str, project: ProjectCreate, db: Session = Depe
 
 
 @router.delete("/{project_name}")
-def delete_project(project_name: str, db: Session = Depends(get_db)):
+def delete_project_by_name(project_name: str, db: Session = Depends(get_db)):
     """Delete a project by name."""
-    success = crud.delete_project(db=db, project_name=project_name)
+    success = crud.delete_project_by_name(db=db, project_name=project_name)
     if not success:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

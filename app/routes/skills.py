@@ -33,9 +33,9 @@ def get_skill_by_id(skill_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{skill_id}", response_model=Skill)
-def update_skill(skill_id: int, skill: SkillCreate, db: Session = Depends(get_db)):
+def update_skill_by_id(skill_id: int, skill: SkillCreate, db: Session = Depends(get_db)):
     """Update a skill by ID."""
-    db_skill = crud.update_skill(db=db, skill_id=skill_id, skill=skill)
+    db_skill = crud.update_skill_by_id(db=db, skill_id=skill_id, skill=skill)
     if not db_skill:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -45,9 +45,9 @@ def update_skill(skill_id: int, skill: SkillCreate, db: Session = Depends(get_db
 
 
 @router.delete("/{skill_id}")
-def delete_skill(skill_id: int, db: Session = Depends(get_db)):
+def delete_skill_by_id(skill_id: int, db: Session = Depends(get_db)):
     """Delete a skill by ID."""
-    success = crud.delete_skill(db=db, skill_id=skill_id)
+    success = crud.delete_skill_by_id(db=db, skill_id=skill_id)
     if not success:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

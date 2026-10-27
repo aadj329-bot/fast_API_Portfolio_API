@@ -15,9 +15,9 @@ def create_status(status_data: StatusCreate, db: Session = Depends(get_db)):
  
 
 @router.get("/{status_id}", response_model=StatusResponse)
-def get_status(status_id: int, db: Session = Depends(get_db)):
+def get_status_by_id(status_id: int, db: Session = Depends(get_db)):
     """Get a status by ID."""
-    db_status = crud.get_status(db, status_id=status_id)
+    db_status = crud.get_status_by_id(db, status_id=status_id)
     if db_status is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -29,13 +29,13 @@ def get_status(status_id: int, db: Session = Depends(get_db)):
 @router.get("/all", response_model=list[StatusResponse])
 def get_all_statuses(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """Get all status entries with pagination."""
-    return crud.get_statuses(db, skip=skip, limit=limit)
+    return crud.get_all_statuses(db, skip=skip, limit=limit)
 
 
 @router.put("/{status_id}", response_model=StatusResponse)
-def update_status(status_id: int, status_data: StatusCreate, db: Session = Depends(get_db)):
+def update_status_by_id(status_id: int, status_data: StatusCreate, db: Session = Depends(get_db)):
     """Update a status entry by ID."""
-    db_status = crud.update_status(db=db, status_id=status_id, status=status_data)
+    db_status = crud.update_status_by_id(db=db, status_id=status_id, status=status_data)
     if db_status is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -45,9 +45,9 @@ def update_status(status_id: int, status_data: StatusCreate, db: Session = Depen
 
 
 @router.delete("/{status_id}")
-def delete_status(status_id: int, db: Session = Depends(get_db)):
+def delete_status_by_id(status_id: int, db: Session = Depends(get_db)):
     """Delete a status entry by ID."""
-    success = crud.delete_status(db=db, status_id=status_id)
+    success = crud.delete_status_by_id(db=db, status_id=status_id)
     if not success:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

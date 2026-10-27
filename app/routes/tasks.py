@@ -35,9 +35,9 @@ def get_task_by_title(task_title: str, db: Session = Depends(get_db)):
 
 
 @router.put("/{task_title}", response_model=Task)
-def update_task(task_title: str, task: TaskUpdate, db: Session = Depends(get_db)):
+def update_task_by_title(task_title: str, task: TaskUpdate, db: Session = Depends(get_db)):
     """Update a task by title."""
-    db_task = crud.update_task(db=db, task_title=task_title, task=task)
+    db_task = crud.update_task_by_title(db=db, task_title=task_title, task=task)
     if not db_task:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

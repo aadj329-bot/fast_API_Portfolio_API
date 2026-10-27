@@ -27,7 +27,7 @@ def get_task_by_title(db: Session, task_title: str):
     return db.query(model.Task).filter(model.Task.title == task_title).first()
 
 
-def update_task(db: Session, task_title: str, task_update: TaskUpdate) -> model.Task | None:
+def update_task_by_title(db: Session, task_title: str, task_update: TaskUpdate) -> model.Task | None:
     """Update a task by title."""
     db_session = get_task_by_title(db, task_title)
     

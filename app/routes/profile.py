@@ -34,7 +34,7 @@ def get_profile_by_username(db: Session = Depends(get_db)):
 
 @router.get("/{profile_username}", response_model=Profile)
 def get_profile_by_username(profile_username: str, db: Session = Depends(get_db)):
-    """Get a profile by ID."""
+    """Get a profile by username."""
     db_profile = crud.get_profile_by_username(db, profile_username=profile_username)
     if not db_profile:
         raise HTTPException(
@@ -45,9 +45,9 @@ def get_profile_by_username(profile_username: str, db: Session = Depends(get_db)
 
 
 @router.put("/{profile_username}", response_model=Profile)
-def update_profile(profile_username: str, profile: ProfileUpdate, db: Session = Depends(get_db)):
+def update_profile_by_username(profile_username: str, profile: ProfileUpdate, db: Session = Depends(get_db)):
     """Update a profile by username."""
-    db_profile = crud.update_profile(db=db, profile_username=profile_username, profile=profile)
+    db_profile = crud.update_profile_by_username(db=db, profile_username=profile_username, profile=profile)
     if not db_profile: 
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -57,9 +57,9 @@ def update_profile(profile_username: str, profile: ProfileUpdate, db: Session = 
 
 
 @router.delete("/{profile_username}")
-def delete_profile(profile_username: str, db: Session = Depends(get_db)):
-    """Delete a profile by ID."""
-    success = crud.delete_profile(db=db, profile_username=profile_username)
+def delete_profile_by_username(profile_username: str, db: Session = Depends(get_db)):
+    """Delete a profile by username."""
+    success = crud.delete_profile_by_username(db=db, profile_username=profile_username)
     if not success:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

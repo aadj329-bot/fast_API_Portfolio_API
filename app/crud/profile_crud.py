@@ -17,12 +17,12 @@ def create_profile(db: Session, profile: ProfileCreate) -> models.Profile:
 
 
 def get_profile_by_username(db: Session, profile_username: str) -> models.Profile | None:
-    """Retrieve profile by ID."""
+    """Retrieve profile by username."""
     return db.query(models.Profile).filter(models.Profile.username == profile_username).first()
 
 
-def update_profile(db: Session, profile_username: str, profile: ProfileUpdate) -> models.Profile | None:
-    """Update profile by ID."""
+def update_profile_by_username(db: Session, profile_username: str, profile: ProfileUpdate) -> models.Profile | None:
+    """Update profile by username."""
     db_profile = get_profile_by_username(db, profile_username)
     if db_profile is None:
         return None
@@ -36,7 +36,8 @@ def update_profile(db: Session, profile_username: str, profile: ProfileUpdate) -
     return db_profile
 
 
-def delete_profile(db: Session, profile_username: str) -> bool:
+def delete_profile_by_username(db: Session, profile_username: str) -> bool:
+    """Delete profile by username."""
     db_profile = get_profile_by_username(db, profile_username)
     
     if db_profile is None:
