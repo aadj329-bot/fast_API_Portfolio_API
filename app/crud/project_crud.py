@@ -44,7 +44,7 @@ def update_project(db: Session, project_name: str, project: ProjectUpdate) -> mo
 
 
 def delete_project(db: Session, project_name: str) -> bool:
-    """Delete a project by ID."""
+    """Delete a project by name."""
     db_project = get_project_by_name(db, project_name)
 
     if db_project is None:

@@ -15,7 +15,7 @@ def create_skill(db: Session, skill: schemas.SkillCreate) -> models.Skill:
     return db_skill
 
 
-def get_skill(db: Session, skill_id: int) -> models.Skill | None:
+def get_skill_by_id(db: Session, skill_id: int) -> models.Skill | None:
     """Retrieve skill by ID."""
     return db.query(models.Skill).filter(models.Skill.id == skill_id).first()
 
@@ -26,7 +26,7 @@ def get_skills(db: Session, skip: int = 0, limit: int = 100) -> list[models.Skil
 
 
 def update_skill(db: Session, skill_id: int, skill: schemas.SkillUpdate) -> models.Skill | None:
-    db_skill = get_skill(db, skill_id)
+    db_skill = get_skill_by_id(db, skill_id)
 
     if db_skill is None:
         return None
@@ -44,7 +44,7 @@ def update_skill(db: Session, skill_id: int, skill: schemas.SkillUpdate) -> mode
 
 def delete_skill(db: Session, skill_id: int):
     """Delete skill by ID."""
-    db_skill = get_skill(db, skill_id)
+    db_skill = get_skill_by_id(db, skill_id)
 
     if db_skill is None:
         return  False

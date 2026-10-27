@@ -21,9 +21,9 @@ def get_skills(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 
 @router.get("/{skill_id}", response_model=Skill)
-def get_skill(skill_id: int, db: Session = Depends(get_db)):
+def get_skill_by_id(skill_id: int, db: Session = Depends(get_db)):
     """Get a skill by ID."""
-    db_skill = crud.get_skill(db, skill_id=skill_id)
+    db_skill = crud.get_skill_by_id(db, skill_id=skill_id)
     if not db_skill:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
