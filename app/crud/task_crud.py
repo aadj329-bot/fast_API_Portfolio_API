@@ -43,7 +43,7 @@ def update_task(db: Session, task_title: str, task_update: TaskUpdate) -> model.
     return db_session
 
 
-def delete_task(db: Session, task_title: str) -> bool:
+def delete_task_by_title(db: Session, task_title: str) -> bool:
     """Delete a task by title."""
     db_task = get_task_by_title(db, task_title)
 

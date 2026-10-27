@@ -16,7 +16,7 @@ def create_status(db: Session, status: schemas.StatusCreate) -> models.Status:
     return db_status
 
 
-def get_status(db: Session, status_id: int) -> models.Status | None:
+def get_status_by_id(db: Session, status_id: int) -> models.Status | None:
     """Retrieve status by ID."""
     return db.query(models.status).filter(models.Status.id == status_id).first()
 
@@ -28,7 +28,7 @@ def get_all_statuses(db: Session, skip: int = 0, limit: int = 100) -> list[model
 
 def update_status(db: Session,status_id: int, status: schemas.StatusCreate) -> models.Status | None:
     """Update the current status."""
-    db_status = get_status(db, status_id)
+    db_status = get_status_by_id(db, status_id)
 
     if db_status is None:
         return None
@@ -46,7 +46,7 @@ def update_status(db: Session,status_id: int, status: schemas.StatusCreate) -> m
 
 def delete_status(db: Session, status_id: int) -> bool:
     """Delete status by ID."""
-    db_status = get_status(db, status_id)
+    db_status = get_status_by_id(db, status_id)
 
     if db_status is None:
         return False
