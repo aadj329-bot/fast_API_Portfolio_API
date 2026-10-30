@@ -3,7 +3,7 @@ from sqlalchemy.sql import func
 
 from core.database import Base
 
-
+ 
 class Skill(Base):
     """Database model for skill."""
     __tablename__ = "skill"

@@ -1,56 +1,41 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from app.schemas import StatusResponse, StatusCreate, StatusUpdate
-from app.crud import status_crud as crud
+from app.schemas import StatusResponseModel, StatusCreateModel, StatusUpdateModel
+from app.services import status_service
 
 router = APIRouter(prefix="/status", tags=["status"])
 
 
-@router.post("", response_model=StatusResponse, status_code=status.HTTP_201_CREATED)
-def create_status(status_data: StatusCreate, db: Session = Depends(get_db)):
+@router.post("", response_model=StatusResponseModel, status_code=status.HTTP_201_CREATED)
+def create_status(status_data: StatusCreateModel, db: Session = Depends(get_db)):
     """Create a new status entry."""
-    return crud.create_status(db=db, status=status_data)
+    return status_service.create_status(db=db, status=status_data)
  
 
-@router.get("/{status_id}", response_model=StatusResponse)
+@router.get("/{status_id}", response_model=StatusResponseModel)
 def get_status_by_id(status_id: int, db: Session = Depends(get_db)):
     """Get a status by ID."""
-    db_status = crud.get_status_by_id(db, status_id=status_id)
-    if db_status is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Status not found"
-        )
-    return db_status
+    return status_service.get_status_by_id(db, status_id=status_id)
+    
 
 
-@router.get("/all", response_model=list[StatusResponse])
+@router.get("/all", response_model=list[StatusResponseModel])
 def get_all_statuses(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """Get all status entries with pagination."""
-    return crud.get_all_statuses(db, skip=skip, limit=limit)
+    return status_service.get_all_statuses(db, skip=skip, limit=limit)
 
 
-@router.put("/{status_id}", response_model=StatusResponse)
-def update_status_by_id(status_id: int, status_data: StatusUpdate, db: Session = Depends(get_db)):
+@router.put("/{status_id}", response_model=StatusResponseModel)
+def update_status_by_id(status_id: int, status_data: StatusUpdateModel, db: Session = Depends(get_db)):
     """Update a status entry by ID."""
-    db_status = crud.update_status_by_id(db=db, status_id=status_id, status=status_data)
-    if db_status is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Status not found"
-        )
-    return db_status
+    return status_service.update_status(db=db, status_id=status_id, status=status_data)
+    
 
 
 @router.delete("/{status_id}")
 def delete_status_by_id(status_id: int, db: Session = Depends(get_db)):
     """Delete a status entry by ID."""
-    success = crud.delete_status_by_id(db=db, status_id=status_id)
-    if not success:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Status not found"
-        )
+    status_service.delete_status(db=db, status_id=status_id)
     return {"message": "Status deleted successfully"}

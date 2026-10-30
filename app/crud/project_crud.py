@@ -1,13 +1,14 @@
 from sqlalchemy.orm import Session
+from fastapi import status
 
 from app.models import project_model as models
-from app.schemas import ProjectCreate, ProjectUpdate
+from app.schemas import ProjectCreateModel, ProjectUpdateModel
 
 
 # PROJECT CRUD OPERATIONS
 
 
-def create_project(db: Session, project: ProjectCreate) -> models.Project:
+def create_project(db: Session, project: ProjectCreateModel) -> models.Project:
     """Create a new project."""
     db_project = models.Project(**project.model_dump(mode="json"))
     db.add(db_project)
@@ -26,7 +27,7 @@ def get_projects(db: Session, skip: int = 0, limit: int = 100) -> list[models.Pr
     return db.query(models.Project).offset(skip).limit(limit).all()
 
 
-def update_project_by_name(db: Session, project_name: str, project: ProjectUpdate) -> models.Project | None:
+def update_project_by_name(db: Session, project_name: str, project: ProjectUpdateModel) -> models.Project | None:
     """Update a project by name."""
     db_project = get_project_by_name(db, project_name)
 
@@ -53,3 +54,5 @@ def delete_project_by_name(db: Session, project_name: str) -> bool:
     db.delete(db_project)
     db.commit()
     return True
+
+

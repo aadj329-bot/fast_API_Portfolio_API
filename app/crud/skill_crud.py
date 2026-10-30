@@ -1,31 +1,32 @@
 from sqlalchemy.orm import Session
-from app.models import skill_model as models
-from app import schemas
+from fastapi import status
+
+from app.models.skill_model import Skill
+from app.schemas import SkillUpdateModel, SkillCreateModel
 
 
-# SKILL CRUD OPERATIONS
 
-
-def create_skill(db: Session, skill: schemas.SkillCreate) -> models.Skill:
+def create_skill(db: Session, skill: SkillCreateModel) -> Skill:
     """Create a new skill."""
-    db_skill = models.Skill(**skill.model_dump(mode='json'))
+    db_skill = Skill(**skill.model_dump(mode='json'))
     db.add(db_skill)
     db.commit()
     db.refresh(db_skill)
     return db_skill
 
 
-def get_skill_by_id(db: Session, skill_id: int) -> models.Skill | None:
+def get_skill_by_id(db: Session, skill_id: int) -> Skill | None:
     """Retrieve skill by ID."""
-    return db.query(models.Skill).filter(models.Skill.id == skill_id).first()
+    return db.query(Skill).filter(Skill.id == skill_id).first()
 
 
-def get_skills(db: Session, skip: int = 0, limit: int = 100) -> list[models.Skill]:
+def get_skills(db: Session, skip: int = 0, limit: int = 100) -> list[Skill]:
     """Retrieve a list of skills."""
-    return db.query(models.Skill).offset(skip).limit(limit).all()
+    return db.query(Skill).offset(skip).limit(limit).all()
 
 
-def update_skill_by_id(db: Session, skill_id: int, skill: schemas.SkillUpdate) -> models.Skill | None:
+def update_skill_by_id(db: Session, skill_id: int, skill: SkillUpdateModel) -> Skill | None:
+    """Retrieve skill by ID."""
     db_skill = get_skill_by_id(db, skill_id)
 
     if db_skill is None:
@@ -47,8 +48,8 @@ def delete_skill_by_id(db: Session, skill_id: int):
     db_skill = get_skill_by_id(db, skill_id)
 
     if db_skill is None:
-        return  False
-
+        return False
+    
     db.delete(db_skill)
     db.commit()
     return True

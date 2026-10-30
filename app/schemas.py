@@ -17,7 +17,7 @@ class ProfileBaseModel(BaseModel):
     projects_count: int
 
 
-class ProfileCreate(ProfileBaseModel):
+class ProfileCreateModel(ProfileBaseModel):
     pass
 
 
@@ -45,6 +45,7 @@ class ProfileResponseModel(ProfileBaseModel):
 
 # Skill schemas
 class SkillBaseModel(BaseModel):
+    id: int
     category: str
     name: str
 
@@ -68,6 +69,7 @@ class SkillResponseModel(SkillBaseModel):
 
 # Status schemas
 class StatusBaseModel(BaseModel):
+    id: int
     current_projects: str
     learning: str
     goals: list[str]
@@ -137,7 +139,7 @@ class TaskUpdateModel(BaseModel):
 
 
 class TaskResponseModel(TaskBaseModel):
-    id: int
+    title: str
     created_at: datetime
     updated_at: datetime
     

@@ -1,13 +1,10 @@
 from sqlalchemy.orm import Session
+from fastapi import status
 from app.models import status_model as models
-from app import schemas
-from core import database
+from app.schemas import StatusCreateModel, StatusUpdateModel
 
 
-# STATUS CRUD OPERATIONS
-
-
-def create_status(db: Session, status: schemas.StatusCreate) -> models.Status:
+def create_status(db: Session, status: StatusCreateModel) -> models.Status:
     """Create a new status."""
     db_status = models.Status(**status.model_dump(mode='json'))
     db.add(db_status)
@@ -26,7 +23,7 @@ def get_all_statuses(db: Session, skip: int = 0, limit: int = 100) -> list[model
     return db.query(models.Status).offset(skip).limit(limit).all()
 
 
-def update_status_by_id(db: Session,status_id: int, status: schemas.StatusCreate) -> models.Status | None:
+def update_status_by_id(db: Session,status_id: int, status: StatusUpdateModel) -> models.Status | None:
     """Update the current status."""
     db_status = get_status_by_id(db, status_id)
 

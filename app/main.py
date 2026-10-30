@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.database import create_tables, get_db
-from app.routes import profile, projects, skills, status, tasks
+from app.routes import profile, project, skill, status, task
+from app.exceptions import (ResourceNotFoundError, DuplicateResourceError)
+from app.error_handlers import (resource_not_found_handler, duplicate_resource_handler)
 
 
 app = FastAPI()
@@ -29,10 +31,15 @@ async def on_startup():
 
 # Include routers
 app.include_router(profile.router)
-app.include_router(projects.router)
-app.include_router(skills.router)
+app.include_router(project.router)
+app.include_router(skill.router)
 app.include_router(status.router)
-app.include_router(tasks.router)
+app.include_router(task.router)
+
+
+# Exception handlers
+app.add_exception_handler(ResourceNotFoundError, resource_not_found_handler)
+app.add_exception_handler(DuplicateResourceError, duplicate_resource_handler)
 
 
 # Root endpoint
