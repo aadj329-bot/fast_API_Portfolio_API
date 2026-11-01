@@ -1,14 +1,40 @@
+# Project notes
 notes/
+
+# Virtual environments
 .venv/
 
+# Python cache
 __pycache__/
 *.py[cod]
+
+# Pytest
 .pytest_cache/
 htmlcov/
+
+# Coverage
 .coverage
 coverage.xml
+
+# SQLite
 portfolio.db
+app.db
+
+# VS Code
 .vscode
 
+# Environment variables
 .env
-app.db
+.env.*
+
+# Alembic cache
+*.pyc 
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Logs
+.logs
