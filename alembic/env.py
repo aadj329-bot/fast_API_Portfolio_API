@@ -1,11 +1,10 @@
 from logging.config import fileConfig
-
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
 from alembic import context
 
 from core.database import Base
+from app.models import Task, Profile, Project, Skill, Status
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
