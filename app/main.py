@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from core.database import create_tables, get_db
+from core.database import get_db
 from app.routes import profile, project, skill, status, task
 from app.exceptions import (ResourceNotFoundError, DuplicateResourceError)
 from app.error_handlers import (resource_not_found_handler, duplicate_resource_handler)
@@ -21,12 +21,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# Create the tables on startup
-@app.on_event("startup")
-async def on_startup():
-    create_tables()
 
 
 # Include routers

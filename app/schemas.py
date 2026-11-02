@@ -89,7 +89,7 @@ class StatusResponseModel(StatusBaseModel):
 class StatusUpdateModel(StatusBaseModel):
     current_projects: Optional[str]
     learning: Optional[str]
-    goals: Optional[str]
+    goals: Optional[list]
 
 
 # Project schemas

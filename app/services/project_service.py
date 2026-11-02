@@ -43,7 +43,7 @@ def delete_project(db: Session, project_name: str):
     """Delete project by name"""
     project = project_crud.get_project_by_name(db=db, project_name=project_name)
 
-    if project_name is None:
+    if project is None:
         raise ResourceNotFoundError(f"Project '{project_name}' not found")
 
     return project_crud.delete_project_by_name(db=db, project_name=project_name)
