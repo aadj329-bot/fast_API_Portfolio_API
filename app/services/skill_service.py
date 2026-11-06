@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.crud import skill_crud
-from app.exceptions import (ResourceNotFoundError, DuplicateResourceError)
+from app.exceptions import DuplicateResourceError, ResourceNotFoundError
 
 
 def create_skill(db: Session, skill):

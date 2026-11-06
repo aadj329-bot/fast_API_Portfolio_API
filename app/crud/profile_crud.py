@@ -1,10 +1,7 @@
 from sqlalchemy.orm import Session
-from fastapi import status
 
 from app.models import profile_model as models
-from core.database import get_db
-from app.schemas import ProfileCreateModel, ProfileUpdateModel 
-
+from app.schemas import ProfileCreateModel, ProfileUpdateModel
 
 # PROFILE CRUD OPERATIONS
 

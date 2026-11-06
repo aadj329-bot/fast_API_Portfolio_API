@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from app.schemas import StatusResponseModel, StatusCreateModel, StatusUpdateModel
+from app.schemas import StatusCreateModel, StatusResponseModel, StatusUpdateModel
 from app.services import status_service
+from core.database import get_db
 
 router = APIRouter(prefix="/status", tags=["status"])
 

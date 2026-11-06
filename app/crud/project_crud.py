@@ -1,11 +1,7 @@
 from sqlalchemy.orm import Session
-from fastapi import status
 
 from app.models import project_model as models
 from app.schemas import ProjectCreateModel, ProjectUpdateModel
-
-
-# PROJECT CRUD OPERATIONS
 
 
 def create_project(db: Session, project: ProjectCreateModel) -> models.Project:

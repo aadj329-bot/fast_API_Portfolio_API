@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from app.schemas import SkillResponseModel, SkillCreateModel, SkillUpdateModel
+from app.schemas import SkillCreateModel, SkillResponseModel, SkillUpdateModel
 from app.services import skill_service
+from core.database import get_db
 
 router = APIRouter(prefix="/skills", tags=["skills"])
 

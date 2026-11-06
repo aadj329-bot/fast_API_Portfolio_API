@@ -1,9 +1,13 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from core.database import get_db
-from app.schemas import ProfileBaseModel, ProfileCreateModel, ProfileUpdateModel, ProfileResponseModel
+from app.schemas import (
+    ProfileCreateModel,
+    ProfileResponseModel,
+    ProfileUpdateModel,
+)
 from app.services import profile_service
+from core.database import get_db
 
 router = APIRouter(prefix="/profile", tags=["profile"])
 

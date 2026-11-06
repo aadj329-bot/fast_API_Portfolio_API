@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from fastapi import status
+
 from app.models import status_model as models
 from app.schemas import StatusCreateModel, StatusUpdateModel
 

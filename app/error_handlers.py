@@ -1,7 +1,7 @@
 from fastapi import Request
 from fastapi.responses import JSONResponse
 
-from app.exceptions import(ResourceNotFoundError, DuplicateResourceError)
+from app.exceptions import DuplicateResourceError, ResourceNotFoundError
 
 
 async def resource_not_found_handler(request: Request, exc: ResourceNotFoundError):

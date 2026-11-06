@@ -1,9 +1,7 @@
 from sqlalchemy.orm import Session
-from fastapi import status
 
 from app.models.skill_model import Skill
-from app.schemas import SkillUpdateModel, SkillCreateModel
-
+from app.schemas import SkillCreateModel, SkillUpdateModel
 
 
 def create_skill(db: Session, skill: SkillCreateModel) -> Skill:
