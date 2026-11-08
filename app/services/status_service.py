@@ -6,11 +6,6 @@ from app.exceptions import DuplicateResourceError, ResourceNotFoundError
 
 def create_status(db: Session, status):
     """Create new status"""
-    existing_status = status_crud.get_status_by_id(db, status.id)
-
-    if existing_status:
-        raise DuplicateResourceError(f"Status '{status.id}' already exists")
-
     return status_crud.create_status(db=db, status=status)
 
 

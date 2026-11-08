@@ -4,7 +4,8 @@ from pydantic import BaseModel, HttpUrl, ConfigDict, Field
 
 
 # Profile schemas
-class ProfileBaseModel(BaseModel):
+
+class ProfileCreateModel(BaseModel):
     username: str
     full_name: str
     bio: str
@@ -17,8 +18,22 @@ class ProfileBaseModel(BaseModel):
     projects_count: int
 
 
-class ProfileCreateModel(ProfileBaseModel):
-    pass
+class ProfileResponseModel(BaseModel):
+    id: int
+    username: str
+    full_name: str
+    bio: str
+    location: str
+    github_url: HttpUrl
+    primary_language: list[str]
+    secondary_language: list[str]
+    current_focus: str
+    learning_path: str
+    projects_count: int
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ProfileUpdateModel(BaseModel):
@@ -34,62 +49,53 @@ class ProfileUpdateModel(BaseModel):
     projects_count: int | None = None
 
 
-class ProfileResponseModel(ProfileBaseModel):
-    id: int
-    created_at: datetime
-    updated_at: datetime
-
-    model_config = ConfigDict(from_attributes=True)
-
-
 # Skill schemas
-class SkillBaseModel(BaseModel):
-    id: int
+
+class SkillCreateModel(BaseModel):
     category: str
     name: str
 
 
-class SkillCreateModel(SkillBaseModel):
-    pass
-
-
-class SkillUpdateModel(BaseModel):
-    category: str | None = Field(None, min_length=1)
-    name: str | None = None
-
-
-class SkillResponseModel(SkillBaseModel):
+class SkillResponseModel(BaseModel):
     id: int
+    category: str
+    name: str
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
+
+class SkillUpdateModel(BaseModel):
+    category: str | None = None
+    name: str | None = Field(default=None, min_length=1)
+
+
 # Status schemas
-class StatusBaseModel(BaseModel):
-    id: int
+
+class StatusCreateModel(BaseModel):
     current_projects: str
     learning: str
     goals: list[str]
 
 
-class StatusCreateModel(StatusBaseModel):
-    pass
-
-
-class StatusResponseModel(StatusBaseModel):
+class StatusResponseModel(BaseModel):
     id: int
+    current_projects: str
+    learning: str
+    goals: list[str]
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
-class StatusUpdateModel(StatusBaseModel):
-    current_projects: str | None
-    learning: str | None
-    goals: list | None
+class StatusUpdateModel(BaseModel):
+    current_projects: str | None = None
+    learning: str | None = None
+    goals: list[str] | None = None
 
 
 # Project schemas
-class ProjectBaseModel(BaseModel):
+
+class ProjectCreateModel(BaseModel):
     name: str
     description: str
     language: str
@@ -97,8 +103,17 @@ class ProjectBaseModel(BaseModel):
     visibility: str
 
 
-class ProjectCreateModel(ProjectBaseModel):
-    pass
+class ProjectResponseModel(BaseModel):
+    id: int
+    name: str
+    description: str
+    language: str
+    url: HttpUrl
+    visibility: str
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ProjectUpdateModel(BaseModel):
@@ -109,32 +124,21 @@ class ProjectUpdateModel(BaseModel):
     visibility: str | None = None
 
 
-class ProjectResponseModel(ProjectBaseModel):
-    id: int
-    created_at: datetime
-    updated_at: datetime
-
-    model_config = ConfigDict(from_attributes=True)
-
-
 # Task Schemas
-class TaskBaseModel(BaseModel):
+
+class TaskCreateModel(BaseModel):
     title: str
     description: str
     
 
-class TaskCreateModel(TaskBaseModel):
-    pass 
+class TaskResponseModel(BaseModel):
+    title: str
+    title: str
+    description: str
+    created_at: datetime
+    updated_at: datetime
 
 
 class TaskUpdateModel(BaseModel):
     title: str | None = Field(None, min_length=1)
     description: str | None = None
-    
-
-
-class TaskResponseModel(TaskBaseModel):
-    title: str
-    created_at: datetime
-    updated_at: datetime
-    

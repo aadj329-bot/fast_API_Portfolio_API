@@ -12,19 +12,18 @@ router = APIRouter(prefix="/status", tags=["status"])
 def create_status(status_data: StatusCreateModel, db: Session = Depends(get_db)):
     """Create a new status entry."""
     return status_service.create_status(db=db, status=status_data)
- 
+
+    
+@router.get("/all", response_model=list[StatusResponseModel])
+def get_all_statuses(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    """Get all status entries with pagination."""
+    return status_service.get_all_statuses(db, skip=skip, limit=limit) 
+
 
 @router.get("/{status_id}", response_model=StatusResponseModel)
 def get_status_by_id(status_id: int, db: Session = Depends(get_db)):
     """Get a status by ID."""
     return status_service.get_status_by_id(db, status_id=status_id)
-    
-
-
-@router.get("/all", response_model=list[StatusResponseModel])
-def get_all_statuses(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    """Get all status entries with pagination."""
-    return status_service.get_all_statuses(db, skip=skip, limit=limit)
 
 
 @router.put("/{status_id}", response_model=StatusResponseModel)
@@ -32,7 +31,6 @@ def update_status_by_id(status_id: int, status_data: StatusUpdateModel, db: Sess
     """Update a status entry by ID."""
     return status_service.update_status(db=db, status_id=status_id, status=status_data)
     
-
 
 @router.delete("/{status_id}")
 def delete_status_by_id(status_id: int, db: Session = Depends(get_db)):

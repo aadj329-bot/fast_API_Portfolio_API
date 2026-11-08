@@ -21,6 +21,34 @@ def test_create_project(client):
     assert response.json()["visibility"] == "public"
 
 
+def test_project_duplication(client):
+    """Test duplication handling"""
+    payload = {
+            "name": "FastAPI Portfolio",
+            "description": "FastAPI project",
+            "language": "Python",
+            "url": "https://github.com/example",
+            "visibility": "public"        
+    }
+    # First create succeeds
+    first_response = client.post(
+        "/projects",
+        json=payload
+    )
+
+    # Assertion
+    assert first_response.status_code == 201
+
+    # Second create should fail
+    response = client.post(
+        "/projects",
+        json=payload
+    )
+
+    # Assertion
+    assert response.status_code == 409
+
+
 @pytest.fixture
 def created_project(client):
     """Fixture to create a project for testing"""
@@ -37,6 +65,30 @@ def created_project(client):
     
     assert response.status_code == 201
     return response.json()
+
+
+def test_get_project_by_name(client, created_project):
+    """Create and test retrieve project"""
+    project_test = created_project["name"]
+
+    response = client.get(
+        f"/projects/{project_test}"
+    )
+
+    # Assertions
+    assert response.status_code == 200
+    assert response.json()["description"] == "FastAPI project"
+    assert response.json()["visibility"] == "public"
+
+
+def test_get_project_not_found(client):
+    """Test get with non-existent project"""
+    response = client.get(
+        "/projects/989"
+    )
+
+    # Assertion
+    assert response.status_code == 404
 
 
 def test_get_projects(client):
@@ -110,5 +162,5 @@ def test_delete_project_not_found(client):
         "/projects/999"
     )
 
-    # Assertions
+    # Assertion
     assert response.status_code == 404

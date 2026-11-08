@@ -18,6 +18,34 @@ def test_create_task(client):
     assert response.json()["description"] == "Making the bacon!"
 
 
+def test_task_creation_duplication(client):
+    """Test task duplication handling"""
+    payload = {
+            "id": 0,
+            "title": "You can't handle the double",
+            "description": "Making the bacon!"        
+    }
+
+    # First create succeeds
+    first_response = client.post(
+        "/tasks",
+        json=payload
+    )
+
+    # Assertion
+    assert first_response.status_code == 201
+
+    # Second create fails
+    response = client.post(
+        "/tasks",
+        json=payload
+    )
+
+    # Assertion
+    assert response.status_code == 409
+
+
+
 @pytest.fixture
 def created_task(client):
     response = client.post(
@@ -38,6 +66,30 @@ def test_get_tasks(client):
 
     assert response.status_code == 200
     assert isinstance(response.json(), list)
+
+
+def test_get_task_by_title(client, created_task):
+    """Create task and test retrieval"""
+    task_title = created_task["title"]
+
+    # Retrieve task
+    response = client.get(
+        f"/tasks/{task_title}"
+    )
+
+    # Assertions
+    assert response.status_code == 200
+    assert response.json()["description"] == "Making the bacon!"
+
+
+def test_get_task_not_found(client):
+    """Test get with non-existent task"""
+    response = client.get(
+        "/tasks/989"
+    )
+
+    # Assertion
+    assert response.status_code == 404
 
 
 def test_update_task(client, created_task):
@@ -72,8 +124,18 @@ def test_delete_task(client, created_task):
     assert response.status_code == 200
 
 
+def test_delete_task_not_found(client):
+    """Test delete with non-existent task"""
+    response = client.delete(
+        "/tasks/989"
+    )
+
+    # Assertion
+    assert response.status_code == 404
+
+
 def test_update_task_not_found(client):
-    """Test update with non-existent task title"""
+    """Test update with non-existent task"""
     response = client.put(
         "/tasks/999",
         json={

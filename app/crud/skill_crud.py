@@ -5,7 +5,7 @@ from app.schemas import SkillCreateModel, SkillUpdateModel
 
 
 def create_skill(db: Session, skill: SkillCreateModel) -> Skill:
-    """Create a new skill."""
+    """Create a new skill"""
     db_skill = Skill(**skill.model_dump(mode='json'))
     db.add(db_skill)
     db.commit()
@@ -13,19 +13,19 @@ def create_skill(db: Session, skill: SkillCreateModel) -> Skill:
     return db_skill
 
 
-def get_skill_by_id(db: Session, skill_id: int) -> Skill | None:
-    """Retrieve skill by ID."""
-    return db.query(Skill).filter(Skill.id == skill_id).first()
+def get_skill_by_name(db: Session, skill_name: str) -> Skill | None:
+    """Retrieve skill by name"""
+    return db.query(Skill).filter(Skill.name == skill_name).first()
 
 
 def get_skills(db: Session, skip: int = 0, limit: int = 100) -> list[Skill]:
-    """Retrieve a list of skills."""
+    """Retrieve a list of skills"""
     return db.query(Skill).offset(skip).limit(limit).all()
 
 
-def update_skill_by_id(db: Session, skill_id: int, skill: SkillUpdateModel) -> Skill | None:
-    """Retrieve skill by ID."""
-    db_skill = get_skill_by_id(db, skill_id)
+def update_skill_by_name(db: Session, skill_name: str, skill: SkillUpdateModel) -> Skill | None:
+    """Retrieve skill by name"""
+    db_skill = get_skill_by_name(db, skill_name)
 
     if db_skill is None:
         return None
@@ -41,9 +41,9 @@ def update_skill_by_id(db: Session, skill_id: int, skill: SkillUpdateModel) -> S
     return db_skill
 
 
-def delete_skill_by_id(db: Session, skill_id: int):
-    """Delete skill by ID."""
-    db_skill = get_skill_by_id(db, skill_id)
+def delete_skill_by_name(db: Session, skill_name: str):
+    """Delete skill by name"""
+    db_skill = get_skill_by_name(db, skill_name)
 
     if db_skill is None:
         return False

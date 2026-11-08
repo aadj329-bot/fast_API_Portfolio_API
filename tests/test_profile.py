@@ -34,6 +34,39 @@ def test_create_profile(client):
     assert response.json()["projects_count"] == 3
 
 
+def test_profile_creation_duplication(client):
+    """Test duplication handling"""
+    payload = {
+        "username": "Bester",
+        "full_name": "testing testerton",
+        "bio": "Like you wouldn't believe",
+        "location": "123 What St. Birmingham, New York",
+        "github_url": "https://github.com/example",
+        "primary_language": ["Python"],
+        "secondary_language": ["JavaScript"],
+        "current_focus": "Getting a better job",
+        "learning_path": "Learning by doing",
+        "projects_count": 3   
+    }
+
+    # First create succeeds
+    first_response = client.post(
+        "/profile",
+        json=payload
+    )
+
+    # Assertion
+    assert first_response.status_code == 201
+
+    # Second create fails
+    response = client.post(
+        "/profile",
+        json=payload
+    )
+
+    # Assertion
+    assert response.status_code == 409
+
 
 @pytest.fixture
 def created_profile(client):
@@ -59,6 +92,30 @@ def created_profile(client):
     return response.json()
 
 
+def test_get_profile(client, created_profile):
+    """Create profile and test retrieval"""
+    profile_test = created_profile["username"]
+
+    # Retrieve profile
+    response = client.get(
+        f"/profile/{profile_test}"
+    )
+
+    # Assertions
+    assert response.status_code == 200
+    assert response.json()["username"] == profile_test
+
+
+def test_get_profile_not_found(client):
+    """Test get with non-existent profile"""
+    response = client.get(
+        "/profile/989"
+    )
+
+    # Assertion
+    assert response.status_code == 404
+
+
 def test_update_profile(client, created_profile):
     """Create a profile and test update"""
     profile_test = created_profile["username"]
@@ -69,8 +126,6 @@ def test_update_profile(client, created_profile):
             "full_name": "Bestie testing testerton"
         }
     )
-
-    print(response.json())
 
     # Assertions
     assert response.status_code == 200
@@ -90,6 +145,16 @@ def test_delete_profile(client, created_profile):
     assert response.status_code == 200
 
 
+def test_delete_profile_not_found(client):
+    """Test delete with non-existent profile"""
+    response = client.delete(
+        "/profile/999"
+    )
+
+    # Assertion
+    assert response.status_code == 404
+
+
 def test_update_profile_not_found(client):
     """Test update with non-existent profile"""
     response = client.put(
@@ -99,8 +164,7 @@ def test_update_profile_not_found(client):
         }
     )
 
-    print(response.json())
-
+    # Assertion
     assert response.status_code == 404
 
 

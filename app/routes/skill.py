@@ -20,20 +20,20 @@ def get_skills(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return skill_service.get_skills(db, skip=skip, limit=limit)
 
 
-@router.get("/{skill_id}", response_model=SkillResponseModel)
-def get_skill_by_id(skill_id: int, db: Session = Depends(get_db)):
-    """Get a skill by ID."""
-    return skill_service.get_skill_by_id(db, skill_id=skill_id)
+@router.get("/{skill_name}", response_model=SkillResponseModel)
+def get_skill_by_name(skill_name: str, db: Session = Depends(get_db)):
+    """Get a skill by name"""
+    return skill_service.get_skill_by_name(db, skill_name=skill_name)
 
-@router.put("/{skill_id}", response_model=SkillResponseModel)
-def update_skill_by_id(skill_id: int, skill: SkillUpdateModel, db: Session = Depends(get_db)):
-    """Update a skill by ID."""
-    return skill_service.update_skill(db=db, skill_id=skill_id, skill=skill)
+@router.put("/{skill_name}", response_model=SkillResponseModel)
+def update_skill_by_name(skill_name: str, skill: SkillUpdateModel, db: Session = Depends(get_db)):
+    """Update a skill by name"""
+    return skill_service.update_skill(db=db, skill_name=skill_name, skill=skill)
     
 
 
-@router.delete("/{skill_id}")
-def delete_skill_by_id(skill_id: int, db: Session = Depends(get_db)):
-    """Delete a skill by ID."""
-    success = skill_service.delete_skill(db=db, skill_id=skill_id)
+@router.delete("/{skill_name}")
+def delete_skill_by_name(skill_name: str, db: Session = Depends(get_db)):
+    """Delete a skill by name"""
+    success = skill_service.delete_skill(db=db, skill_name=skill_name)
     return {"message": "Skill deleted successfully"}
