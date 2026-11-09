@@ -9,7 +9,7 @@ def test_create_skill(client):
         json={
             "id": 1,
             "category": "This and that",
-            "name": "Aaron"
+            "name": "Tester Testington"
         }
     )
 
@@ -17,22 +17,37 @@ def test_create_skill(client):
     assert response.status_code == 201
     assert response.json()["id"] == 1
     assert response.json()["category"] == "This and that"
-    assert response.json()["name"] == "Aaron"
+    assert response.json()["name"] == "Tester Testington"
 
 
 def test_create_duplicate(client):
     """Test creating a duplicate skill"""
+    
+    # Create first test
+    test1 = client.post(
+        "/skills",
+        json={
+            "id": 1,
+            "category": "This and that",
+            "name": "madskills"
+        }
+    )                                                                      
+
+    # Assertion
+    assert test1.status_code == 201
+
+    # Second create should fail
     response = client.post(
         "/skills",
         json={
             "id": 1,
             "category": "This and that",
-            "name": "Aaron"
+            "name": "madskills"
         }
     )
 
     # Assertion
-    assert response.status_code == 409
+    assert response.status_code == 409 
 
 
 @pytest.fixture
@@ -107,9 +122,6 @@ def test_update_skill_not_found(client):
             "category": "never gonna get it."
         }
     )
-
-    print(response.status_code)
-    print(response.json())
     
     # Assertion
     assert response.status_code == 404

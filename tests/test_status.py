@@ -92,8 +92,6 @@ def test_update_status_not_found(client):
         }
     )
 
-    print(response.json())
-
     # Assertion
     assert response.status_code == 404
 
