@@ -111,6 +111,38 @@ def test_update_task(client, created_task):
     assert response.json()["description"] == "Bacon is crispy"
 
 
+def test_update_task_duplicate_title(client):
+    """Attempt to rename a task to an existing title"""
+    
+    # Create first task
+    client.post(
+        "/tasks",
+        json={
+            "title": "Task One",
+            "description": "First task"
+        }
+    )
+
+    # Create second task
+    client.post(
+        "/tasks",
+        json={
+            "title": "Task Two",
+            "description": "Second task"
+        }
+    )
+
+    # Test
+    response = client.put(
+        "/tasks/Task One",
+        json={
+            "title": "Task Two"        }
+    )
+
+    # Assertion
+    assert response.status_code == 409
+
+
 def test_delete_task(client, created_task):
     """Test delete task by first creating a task to delete"""
     task_title = created_task["title"]

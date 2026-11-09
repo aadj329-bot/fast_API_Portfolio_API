@@ -121,6 +121,24 @@ Tasks           Create, Read, Update, Delete
 
 ## Running Tests
 
+### Configure Environment Variables
+
+Create a .env file in the project root:
+
+DATABASE_URL=sqlite:///./portfolio.db
+
+### Run Database Migrations
+
+```bash
+alembic upgrade head
+```
+
+### Start the API
+
+```bash
+python run.py
+```
+
 Run the test suite with:
 
 ```bash

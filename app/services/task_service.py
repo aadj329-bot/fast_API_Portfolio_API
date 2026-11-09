@@ -36,6 +36,16 @@ def update_task(db: Session, task_title: str, task):
     if existing_task is None:
         raise ResourceNotFoundError(f"Task '{task_title}' not found")
 
+    if task.title:
+        duplicate_task = task_crud.get_task_by_title(db=db, task_title=task.title)
+        if (
+            duplicate_task 
+            and duplicate_task.id != existing_task.id
+        ):
+            raise DuplicateResourceError(
+                f"Task '{task.title}' already exists"
+            )
+
     return task_crud.update_task_by_title(db=db, task_title=task_title, task_update=task)
 
 
