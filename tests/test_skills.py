@@ -115,6 +115,40 @@ def test_update_skill_not_found(client):
     assert response.status_code == 404
 
 
+def test_update_skill_duplicate_name(client):
+    """Attempt to rename a skill to an existing one"""
+
+    # Create first skill
+    client.post(
+        "/skills",
+        json={
+            "name": "Pytest",
+            "category": "QA Automation"
+        }
+    )
+
+    # Create second skill
+    client.post(
+        "/skills",
+        json={
+            "name": "unit-test",
+            "category": "backend engineer"
+        }
+    )
+
+    # Test
+    response = client.put(
+        "/skills/Pytest",
+        json={
+            "name": "unit-test",
+            "category": "oh no"
+        }
+    )
+
+    # Assertion
+    assert response.status_code == 409
+
+
 def test_delete_skill(client, created_skill):
     """Create a skill and test delete"""
     skill_test = created_skill["name"]

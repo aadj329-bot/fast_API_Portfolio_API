@@ -133,6 +133,55 @@ def test_update_profile(client, created_profile):
     assert response.json()["full_name"] == "Bestie testing testerton"
 
 
+def test_update_profile_duplicate_username(client):
+    """Attempt to rename a profile to an existing name"""
+
+    # Create first profile
+    client.post(
+        "/profile",
+        json={
+            "username": "User One",
+            "full_name": "testing testerton",
+            "bio": "Like you wouldn't believe",
+            "location": "123 What St. Birmingham, New York",
+            "github_url": "https://github.com/example",
+            "primary_language": ["Python"],
+            "secondary_language": ["JavaScript"],
+            "current_focus": "Getting a better job",
+            "learning_path": "Learning by doing",
+            "projects_count": 3    
+        }
+    )
+
+    # Create second profile
+    client.post(
+        "/profile",
+        json={
+            "username": "Second User",
+            "full_name": "testing testerton",
+            "bio": "Like you wouldn't believe",
+            "location": "123 What St. Birmingham, New York",
+            "github_url": "https://github.com/example",
+            "primary_language": ["Python"],
+            "secondary_language": ["JavaScript"],
+            "current_focus": "Getting a better job",
+            "learning_path": "Learning by doing",
+            "projects_count": 3 
+        }
+    )
+
+    # Test
+    response = client.put(
+        "/profile/User One",
+        json={
+            "username": "Second User"
+        }
+    )
+
+    # Assertion
+    assert response.status_code == 409
+
+
 def test_delete_profile(client, created_profile):
     """Create a profile and test delete"""
     profile_test = created_profile["username"]

@@ -8,6 +8,7 @@ def create_task(db: Session, task):
     """Create new task"""
     existing_task = task_crud.get_task_by_title(db, task.title)
 
+    # Duplicate title error
     if existing_task:
         raise DuplicateResourceError(f"Task '{task.title}' already exists")
 
@@ -23,6 +24,7 @@ def get_task_by_title(db: Session, task_title: str):
     """Retrieve task by title"""
     task = task_crud.get_task_by_title(db=db, task_title=task_title)
 
+    # Title not found error
     if task is None:
         raise ResourceNotFoundError(f"Task '{task_title}' not found")
 
@@ -33,18 +35,16 @@ def update_task(db: Session, task_title: str, task):
     """Update task by title"""
     existing_task = task_crud.get_task_by_title(db=db, task_title=task_title)
 
+    #  Title not found error
     if existing_task is None:
         raise ResourceNotFoundError(f"Task '{task_title}' not found")
 
+    # Duplicate title attempt error
     if task.title:
         duplicate_task = task_crud.get_task_by_title(db=db, task_title=task.title)
-        if (
-            duplicate_task 
-            and duplicate_task.id != existing_task.id
-        ):
-            raise DuplicateResourceError(
-                f"Task '{task.title}' already exists"
-            )
+        
+        if (duplicate_task and duplicate_task.id != existing_task.id):
+            raise DuplicateResourceError(f"Task '{task.title}' already exists")
 
     return task_crud.update_task_by_title(db=db, task_title=task_title, task_update=task)
 
@@ -53,6 +53,7 @@ def delete_task(db: Session, task_title: str):
     """Delete task by title"""
     task = task_crud.get_task_by_title(db=db, task_title=task_title)
 
+    # Title not found error
     if task is None:
         raise ResourceNotFoundError(f"Task '{task_title}' not found")
 

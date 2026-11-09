@@ -18,6 +18,7 @@ def get_status_by_id(db: Session, status_id: int):
     """Retrieve status by id"""
     status = status_crud.get_status_by_id(db=db, status_id=status_id)
 
+    # Status id not found error
     if status is None:
         raise ResourceNotFoundError(f"Status '{status_id}' not found")
 
@@ -28,8 +29,10 @@ def update_status(db: Session, status_id: int, status):
     """Update status by id"""
     existing_status = status_crud.get_status_by_id(db=db, status_id=status_id)
 
+    # Status id not found error
     if existing_status is None:
         raise ResourceNotFoundError(f"Status '{status_id}' not found")
+
 
     return status_crud.update_status_by_id(db=db, status_id=status_id, status=status)
 
@@ -38,6 +41,7 @@ def delete_status(db: Session, status_id: int):
     """Delete status by id"""
     status = status_crud.get_status_by_id(db=db, status_id=status_id)
 
+    # Status id not found error
     if status is None:
         raise ResourceNotFoundError(f"Status '{status_id}' not found")
 

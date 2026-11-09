@@ -73,9 +73,7 @@ def test_get_task_by_title(client, created_task):
     task_title = created_task["title"]
 
     # Retrieve task
-    response = client.get(
-        f"/tasks/{task_title}"
-    )
+    response = client.get(f"/tasks/{task_title}")
 
     # Assertions
     assert response.status_code == 200
@@ -84,9 +82,7 @@ def test_get_task_by_title(client, created_task):
 
 def test_get_task_not_found(client):
     """Test get with non-existent task"""
-    response = client.get(
-        "/tasks/989"
-    )
+    response = client.get("/tasks/989")
 
     # Assertion
     assert response.status_code == 404
@@ -136,7 +132,8 @@ def test_update_task_duplicate_title(client):
     response = client.put(
         "/tasks/Task One",
         json={
-            "title": "Task Two"        }
+            "title": "Task Two"        
+        }
     )
 
     # Assertion
@@ -148,9 +145,7 @@ def test_delete_task(client, created_task):
     task_title = created_task["title"]
 
     # Delete created task
-    response = client.delete(
-        f"/tasks/{task_title}"
-    )
+    response = client.delete(f"/tasks/{task_title}")
 
     # Assertions
     assert response.status_code == 200
@@ -158,9 +153,7 @@ def test_delete_task(client, created_task):
 
 def test_delete_task_not_found(client):
     """Test delete with non-existent task"""
-    response = client.delete(
-        "/tasks/989"
-    )
+    response = client.delete("/tasks/989")
 
     # Assertion
     assert response.status_code == 404

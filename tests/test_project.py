@@ -114,19 +114,6 @@ def test_update_project(client, created_project):
     assert response.json()["name"] == "Update Name"
 
 
-def test_delete_project(client, created_project):
-    """Test delete project by first creating a project"""
-    project = created_project["name"]
-
-    # Delete created project
-    response = client.delete(
-        f"/projects/{project}"
-    )
-
-    # Assertions
-    assert response.status_code == 200
-
-
 def test_update_project_not_found(client):
     """Test update with non-existent project name"""
     response = client.put(
@@ -142,6 +129,45 @@ def test_update_project_not_found(client):
     assert response.json()["message"] == "Project '999' not found"
 
 
+def test_update_project_duplicate_name(client):
+    """Attempt to rename a project to an existing one"""
+
+    # Create first project
+    client.post(
+        "/projects",
+        json={
+            "name": "Project One",
+            "description": "Place holder one",
+            "language": "Python",
+            "url": "https://placeholer.com",
+            "visibility": "public"
+        }
+    )
+
+    # Create second project
+    client.post(
+        "/projects",
+        json={
+            "name": "Project Two",
+            "description": "Second Placeholer",
+            "language": "Python",
+            "url": "https://holdensecond.com",
+            "visibility": "public"
+        }
+    )
+
+    # Test
+    response = client.put(
+        "/projects/Project One",
+        json ={
+            "name": "Project Two"
+        }
+    )
+
+    # Assertion
+    assert response.status_code == 409
+
+
 def test_update_project_invalid_data(client, created_project):
     """Test updating a project with invalid data"""
     project = created_project["name"]
@@ -154,6 +180,19 @@ def test_update_project_invalid_data(client, created_project):
     )
 
     assert response.status_code == 422
+
+
+def test_delete_project(client, created_project):
+    """Test delete project by first creating a project"""
+    project = created_project["name"]
+
+    # Delete created project
+    response = client.delete(
+        f"/projects/{project}"
+    )
+
+    # Assertions
+    assert response.status_code == 200
 
 
 def test_delete_project_not_found(client):

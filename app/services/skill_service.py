@@ -33,8 +33,16 @@ def update_skill(db: Session, skill_name: str, skill):
     """Update skill by name"""
     existing_skill = skill_crud.get_skill_by_name(db=db, skill_name=skill_name)
 
+    # Skill name not found error
     if existing_skill is None:
         raise ResourceNotFoundError(f"Skill '{skill_name}' not found")
+
+    # Skill name duplicate attempt error
+    if skill.name and skill.name != skill_name:
+        duplicate_name = skill_crud.get_skill_by_name(db=db, skill_name=skill.name)
+
+        if duplicate_name is not None and duplicate_name.id != existing_skill.id:
+            raise DuplicateResourceError(f"Skill name '{skill.name}' already exists")
 
     return skill_crud.update_skill_by_name(db=db, skill_name=skill_name, skill=skill)
 
