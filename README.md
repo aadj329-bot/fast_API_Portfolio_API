@@ -1,62 +1,79 @@
 # FastAPI Portfolio API
 
-A portfolio API built with Python and FastAPI. Built to be beginner-friendly.
-
-This project showcases my profile, skills, current status, and portfolio projects through simple API endpoints.
+This project is a portfolio API built with FastAPI and SQLAlchemy to showcase my profile, technical skills, projects, and ongoing learning journey. 
+Beyond serving portfolio data through RESTful endpoints, it demonstrates backend development fundamentals including database design, CRUD operations, 
+schema migrations, automated testing, and clean application architecture.
 
 ## Features
 
-- Returns profile information
-- Lists programming languages, frameworks, tools, and concepts
-- Shows current learning goals and project status
-- Lists portfolio projects
-- Includes a health-check endpoint
-- Uses Pydantic models to validate API data
-- Includes automated tests with pytest
-- Runs test automatically with GitHub Actions
+- RESTful API built with FastAPI
+- Stores and serves portfolio data using SQLAlchemy ORM
+- Manages portfolio resources including profiles, skill, projects, statuses and tasks
+- Supports CRUD operations for portfolio
+- Uses Pydantic models for request and response validation
+- Includes health-check endpoint for service monitoring
+- Automated test suite built with pytest
+- Continuous Integration (CI) with GitHub Actions
+- Database schemas management with Alembic migrations
 
-## Technologies
+## Tech Stack
 
-- Python
-- FastAPI
-- Pydantic
-- Uvicorn
-- Pytest
-- GitHub Actions
+### Category                   ### Technologies
+
+Backend                    FastAPI, Python 3, SQLAlchemy
+Database                   SQLite, Alembic
+Validation                 Pydantic
+Testing                    Pytest
+Version Control            Git, GitHub
+API Design                 RESTful Endpoints, CRUD Operations, Dependency Injection
+
+## Architecture
+
+Client Request
+   ↓
+Routes
+   ↓
+Services
+   ↓
+CRUD
+   ↓
+SQLAlchemy
+   ↓
+Database
 
 ## Project Structure
 
-```text
-fast_API_Portfolio_API/
-├── app/
-│   ├── main.py
-│   └── routes/
-│       ├── profile.py
-│       ├── projects.py
-│       ├── skills.py
-│       └── status.py
-├── tests/
-│   └── test_main.py
-├── .github/
-│   └── workflows/
-│       └── test.yml
-├── .gitignore
-├── pyproject.toml
-├── requirements.txt
-├── run.py
-└── README.md
-```
+app/
+  main.py          App setup, routers, CORS, exception handlers
+  routes/          CRUD HTTP endpoints for portfolio resources
+  services/        Resource checks and business logic
+  crud/            SQLAlchemy create/read/update/delete operations
+  models/          SQLAlchemy tables: profiles, projects, skills, statuses, tasks
+  schemas.py       Pydantic create, response, and update models
+  error_handlers.py
+                   Maps custom errors to HTTP responses
+core/
+  database.py      DATABASE_URL configuration and session dependency
+alembic/
+  env.py           Migration configuration
+  versions/        Initial database schema migration
+tests/
+  conftest.py      In-memory SQLite test setup and DB dependency override
+  test_*.py        API and resource tests
+.github/workflows/
+  test.yml         CI runs pytest with a 95% coverage threshold
+run.py             Uvicorn startup entry point
 
 ## Setup
 
-Clone the repository:
+### 1. Clone the repository:
 
 ```bash
 git clone https://github.com/aadj329-bot/fast_API_Portfolio_API.git
 cd fast_API_Portfolio_API
 ```
 
-Create a virtual environment:
+## 2. Create a virtual environment:
 
 ### Windows PowerShell
 
@@ -72,13 +89,13 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-Install the project dependencies:
+## 3. Install the project dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Run the API
+## 4. Run the API
 
 Start the application with:
 
@@ -86,29 +103,21 @@ Start the application with:
 python run.py
 ```
 
-The API will be available at:
+### Once Running, the API will be available at:
 
-http://127.0.0.1:8000
+Resource	URL
+- API	http://127.0.0.1:8000
+- Swagger UI	http://127.0.0.1:8000/docs
+- ReDoc	http://127.0.0.1:8000/redoc
 
-FastAPI also provides interactive documentation at:
+## API Resources
 
-http://127.0.0.1:8000/docs
-
-With an alternative documentation page at:
-
-http://127.0.0.1:8000/redoc
-
-## Available Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/` | Returns a welcome message |
-| GET | `/health` | Returns the health status of the API |
-| GET | `/profile` | Returns the profile information |
-| GET | `/skills` | Returns skills and technologies |
-| GET | `/status` | Returns current status and goals |
-| GET | `/projects` | Returns portfolio projects | 
-
+### Resource    Supported Operations
+Profile         Create, Read, Update, Delete
+Skills          Create, Read, Update, Delete
+Projects        Create, Read, Update, Delete
+Statuses        Create, Read, Update, Delete
+Tasks           Create, Read, Update, Delete
 
 ## Running Tests
 
@@ -126,6 +135,7 @@ The tests will verify several aspects:
 - unsupported methods returning 405
 - response fields having the expected types
 - project data being returned correctly
+- The test suite includes endpoint, validation, and database operation tests and maintains a 95% coverage requirement through the CI pipeline
 
 ## Continuous Integration
 
@@ -149,32 +159,33 @@ The workflow file is located at:
 
 ## What I Am Learning
 
-This project is helping me practice:
+This project gives me hands-on experience with:
 
-    - Python project organization
-    - Building REST APIs with FastAPI
-    - Creating routes and response models
-    - Validating data with Pydantic
-    - Writing automated tests
-    - Using Git and GitHub
-    - Using continuous integration
-    - Improving code through small, tested changes
+- Designing RESTful APIs with FastAPI
+- Structuring Python applications using layered architecture
+- Managing database schemas with Alembic migrations
+- Building and testing CRUD operations
+- Validating data with Pydantic
+- Writing automated tests with Pytest
+- Using Git and GitHub in a development workflow
+- Automating quality checks with GitHub Actions
+- Refactoring code while maintaining test coverage
 
 ## Future Improvements
 
 Future improvements will include:
 
     - Adding more portfolio projects
-    - Connecting the API to a database
-    - Adding authentication
-    - Adding project filtering
-    - Adding individual project lookup by ID
+    - Expand exception handling and application logging 
+    - Adding authentication and authorization
+    - Adding project filtering and search functionality
     - Deploying the API
-    - Adding a frontend
-    - Improved error handling
+    - Building a frontend interface
 
-## Author
+## About the Author
 
-Created by Aaron D. Johnson.
+Hello, my name is Aaron Johnson. I am an aspiring backend developer transitioning into software engineering through hands-on project work and continuous learning.
+
+This repository serves as both a portfolio piece and a learning project. This allows me to apply concepts such as API design, database modeling, automated testing, migrations and continuous integration within a real-world codebase.
 
 GitHub: https://github.com/aadj329-bot
