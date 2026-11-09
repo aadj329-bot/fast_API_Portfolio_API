@@ -1,5 +1,13 @@
 fastapi
 uvicorn
+
+sqlalchemy
+alembic
+
+pydantic
+python-dotenv
+
 pytest
-httpx
 pytest-cov
+
+httpx

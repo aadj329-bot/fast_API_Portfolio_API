@@ -1,26 +1,39 @@
-from fastapi import APIRouter
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
 
-class Status(BaseModel):
-    current_projects: str
-    learning: str
-    goals: list
-    motivation_level: str
-    last_updated: str
+from app.schemas import StatusCreateModel, StatusResponseModel, StatusUpdateModel
+from app.services import status_service
+from core.database import get_db
 
-router = APIRouter(prefix="/status")
+router = APIRouter(prefix="/status", tags=["status"])
 
-@router.get("", response_model=Status)
-def get_status():
-    return Status(
-        current_projects="Building personal FastAPI portfolio API",
-        learning="Advanced Python, backend development, GitHub workflows",
-        goals=[
-            "Transistion into QA Automation / Backend Python",
-            "Build portfolio projects",
-            "Deploy FastAPI apps",
-            "Grow GitHub activity"
-        ],
-        motivation_level="High",
-        last_updated="2026-09-15"
-    )
+
+@router.post("", response_model=StatusResponseModel, status_code=status.HTTP_201_CREATED)
+def create_status(status_data: StatusCreateModel, db: Session = Depends(get_db)):
+    """Create a new status entry."""
+    return status_service.create_status(db=db, status=status_data)
+
+    
+@router.get("/all", response_model=list[StatusResponseModel])
+def get_all_statuses(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    """Get all status entries with pagination."""
+    return status_service.get_all_statuses(db, skip=skip, limit=limit) 
+
+
+@router.get("/{status_id}", response_model=StatusResponseModel)
+def get_status_by_id(status_id: int, db: Session = Depends(get_db)):
+    """Get a status by ID."""
+    return status_service.get_status_by_id(db, status_id=status_id)
+
+
+@router.put("/{status_id}", response_model=StatusResponseModel)
+def update_status_by_id(status_id: int, status_data: StatusUpdateModel, db: Session = Depends(get_db)):
+    """Update a status entry by ID."""
+    return status_service.update_status(db=db, status_id=status_id, status=status_data)
+    
+
+@router.delete("/{status_id}")
+def delete_status_by_id(status_id: int, db: Session = Depends(get_db)):
+    """Delete a status entry by ID."""
+    status_service.delete_status(db=db, status_id=status_id)
+    return {"message": "Status deleted successfully"}

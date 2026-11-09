@@ -1,34 +1,40 @@
-from fastapi import APIRouter
-from pydantic import BaseModel, HttpUrl 
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
 
-class Profile(BaseModel):
-    username: str
-    full_name: str
-    bio: str
-    location: str
-    github_url: HttpUrl 
-    primary_language: list
-    secondary_language: list
-    current_focus: str
-    learning_path: str
-    projects_count: int
+from app.schemas import (
+    ProfileCreateModel,
+    ProfileResponseModel,
+    ProfileUpdateModel,
+)
+from app.services import profile_service
+from core.database import get_db
 
-router = APIRouter(prefix="/profile")
+router = APIRouter(prefix="/profile", tags=["profile"])
 
-@router.get("", response_model=Profile)
-def get_profile():
-    return Profile(
-        username="Aaron",
-        full_name="Aaron D. Johnson",
-        bio="Python developer focused on automation, backend APIs, and continuous integration.",
-        location="Michigan, United States",
-        github_url="https://github.com/aadj329-bot",
-        primary_language=["Python"],
-        secondary_language=["SQL"],
-        current_focus="Building automation tools and backend APIs using Python and FastAPI.",
-        learning_path="Certification in Python for Everybody and exploring advanced backend topics.",
-        projects_count=5
-    )
+
+@router.post("", response_model=ProfileResponseModel, status_code=status.HTTP_201_CREATED)
+def create_profile(profile: ProfileCreateModel, db: Session = Depends(get_db)):
+    """Create a new profile."""
+    return profile_service.create_profile(db, profile=profile)
 
 
 
+@router.get("/{profile_username}", response_model=ProfileResponseModel)
+def get_profile_by_username(profile_username: str, db: Session = Depends(get_db)):
+    """Get a profile by username."""
+    return profile_service.get_profile_by_username(db, profile_username=profile_username)
+  
+
+
+@router.put("/{profile_username}", response_model=ProfileResponseModel)
+def update_profile_by_username(profile_username: str, profile: ProfileUpdateModel, db: Session = Depends(get_db)):
+    """Update a profile by username."""
+    return profile_service.update_profile(db=db, profile_username=profile_username, profile=profile)
+    
+
+
+@router.delete("/{profile_username}")
+def delete_profile_by_username(profile_username: str, db: Session = Depends(get_db)):
+    """Delete a profile by username."""
+    profile_service.delete_profile(db=db, profile_username=profile_username)
+    return{"message": "Task deleted successfully"}

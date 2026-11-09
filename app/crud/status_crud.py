@@ -1,0 +1,53 @@
+from sqlalchemy.orm import Session
+
+from app.models import status_model as models
+from app.schemas import StatusCreateModel, StatusUpdateModel
+
+
+def create_status(db: Session, status: StatusCreateModel) -> models.Status:
+    """Create a new status."""
+    db_status = models.Status(**status.model_dump(mode='json'))
+    db.add(db_status)
+    db.commit()
+    db.refresh(db_status)
+    return db_status
+
+
+def get_status_by_id(db: Session, status_id: int) -> models.Status | None:
+    """Retrieve status by ID."""
+    return db.query(models.Status).filter(models.Status.id == status_id).first()
+
+
+def get_all_statuses(db: Session, skip: int = 0, limit: int = 100) -> list[models.Status]:
+    """Retrieve a list of statuses."""
+    return db.query(models.Status).offset(skip).limit(limit).all()
+
+
+def update_status_by_id(db: Session,status_id: int, status: StatusUpdateModel) -> models.Status | None:
+    """Update the current status."""
+    db_status = get_status_by_id(db, status_id)
+
+    if db_status is None:
+        return None
+
+    update_data = status.model_dump(exclude_unset=True, mode='json')
+
+    for field, value in update_data.items():
+        setattr(db_status, field, value)
+
+    db.add(db_status)
+    db.commit()
+    db.refresh(db_status)
+    return db_status
+
+
+def delete_status_by_id(db: Session, status_id: int) -> bool:
+    """Delete status by ID."""
+    db_status = get_status_by_id(db, status_id)
+
+    if db_status is None:
+        return False
+
+    db.delete(db_status)
+    db.commit()
+    return True
